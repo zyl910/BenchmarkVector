@@ -1,0 +1,258 @@
+BenchmarkVector_data
+====================
+
+## lntel(R) Core(TM) i5-8250U CPU @ 1.60GHz, Windows 10
+
+### BenchmarkVectorCore20, Debug, x64
+```
+BenchmarkVectorCore20
+
+IsRelease:      False
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 10.0.19044.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.9\
+RuntimeInformation.FrameworkDescription:        .NET Core 4.6.26614.01
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=11297, MFLOPS/s=362.574134726033
+SumVector4:     2.748779E+11    # msUsed=4391, MFLOPS/s=932.817125939422, scale=2.57276246868595
+SumVectorT:     5.497558E+11    # msUsed=2703, MFLOPS/s=1515.35331113578, scale=4.17943026267111
+```
+
+### BenchmarkVectorCore20, Release, x64
+```
+BenchmarkVectorCore20
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 10.0.19044.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.9\
+RuntimeInformation.FrameworkDescription:        .NET Core 4.6.26614.01
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=4969, MFLOPS/s=824.310726504327
+SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.02674230145867
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.15927750410509
+```
+
+### BenchmarkVectorCore20UseLib, Release, x64
+
+```
+BenchmarkVectorCore20UseLib
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 10.0.19044.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.9\
+RuntimeInformation.FrameworkDescription:        .NET Core 4.6.26614.01
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=4906, MFLOPS/s=834.896045658377
+SumVector4:     2.748779E+11    # msUsed=1235, MFLOPS/s=3316.5991902834, scale=3.97246963562753
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.05582922824302
+```
+
+### BenchmarkVectorFw45, Release, x64
+```
+BenchmarkVectorFw45
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/common/vscsprojects/vs15_2017/NStd/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=5032, MFLOPS/s=813.990461049285
+SumVector4:     2.748779E+11    # msUsed=1250, MFLOPS/s=3276.8, scale=4.0256
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=8.0512
+```
+
+### BenchmarkVectorFw45, Release, x86
+```
+BenchmarkVectorFw45
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     False
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework\v4.0.30319\
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    4
+Vector.IsHardwareAccelerated:   False
+Vector<byte>.Count:     16      # 128bit
+Vector<float>.Count:    4       # 128bit
+Vector<double>.Count:   2       # 128bit
+Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/common/vscsprojects/vs15_2017/NStd/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        8.38656E+12     # msUsed=3766, MFLOPS/s=1087.62612851832
+SumVector4:     2.748779E+11    # msUsed=3500, MFLOPS/s=1170.28571428571, scale=1.076
+SumVectorT:     2.748779E+11    # msUsed=19422, MFLOPS/s=210.894861497271, scale=0.193903820409844
+```
+
+### BenchmarkVectorFw46, Release, x86
+```
+BenchmarkVectorFw46
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     False
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework\v4.0.30319\
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    4
+Vector.IsHardwareAccelerated:   False
+Vector<byte>.Count:     16      # 128bit
+Vector<float>.Count:    4       # 128bit
+Vector<double>.Count:   2       # 128bit
+Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+Main-Vector4.Assembly.CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        8.38656E+12     # msUsed=3750, MFLOPS/s=1092.26666666667
+SumVector4:     2.748779E+11    # msUsed=3469, MFLOPS/s=1180.74373018161, scale=1.08100317094263
+SumVectorT:     2.748779E+11    # msUsed=19766, MFLOPS/s=207.224526965496, scale=0.189719720732571
+```
+
+### BenchmarkVectorFw46, Release, x64
+```
+BenchmarkVectorFw46
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+Main-Vector4.Assembly.CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=4985, MFLOPS/s=821.664994984955
+SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.03970826580227
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.976
+```
+
+### BenchmarkVectorFw46UseLib, Release, x64
+```
+BenchmarkVectorFw46UseLib
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     False
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework\v4.0.30319\
+RuntimeInformation.FrameworkDescription:        .NET Framework 4.8.4515.0
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    4
+Vector.IsHardwareAccelerated:   False
+Vector<byte>.Count:     16      # 128bit
+Vector<float>.Count:    4       # 128bit
+Vector<double>.Count:   2       # 128bit
+Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        8.38656E+12     # msUsed=3750, MFLOPS/s=1092.26666666667
+SumVector4:     2.748779E+11    # msUsed=3500, MFLOPS/s=1170.28571428571, scale=1.07142857142857
+SumVectorT:     2.748779E+11    # msUsed=19812, MFLOPS/s=206.74338784575, scale=0.189279224712296
+```
+
+### BenchmarkVectorFw46UseLib, Release, x86
+```
+BenchmarkVectorFw46UseLib
+
+IsRelease:      True
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     True
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    4.0.30319.42000
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\
+RuntimeInformation.FrameworkDescription:        .NET Framework 4.8.4515.0
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    8
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=4984, MFLOPS/s=821.829855537721
+SumVector4:     2.748779E+11    # msUsed=1250, MFLOPS/s=3276.8, scale=3.9872
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.18390804597701
+```
