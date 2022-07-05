@@ -347,3 +347,15 @@ SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.976
 SumVectorAvx:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.976
 ```
 
+### BenchmarkVectorCpp
+```
+BenchmarkVectorCpp
+
+IsRelease:      True
+_MSC_VER:       1916
+__AVX__:        1
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
+SumBase:        6.87195e+10     # msUsed=4977, MFLOPS/s=822.985734
+```
+
