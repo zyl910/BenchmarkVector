@@ -1,9 +1,17 @@
-﻿using System;
+﻿#if NETCOREAPP3_0_OR_GREATER
+#define Allow_Intrinsics
+#endif
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
+#if Allow_Intrinsics
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+#endif
 
 namespace BenchmarkVector {
     /// <summary>
@@ -98,6 +106,22 @@ namespace BenchmarkVector {
             mFlops = countMFlops * 1000 / msUsed;
             scale = mFlops / mFlopsBase;
             tw.WriteLine(indent + string.Format("SumVectorT:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+            // SumVectorAvx.
+#if Allow_Intrinsics
+            if (Avx.IsSupported) {
+                try {
+                    tickBegin = Environment.TickCount;
+                    rt = SumVectorAvx(src, count, loops);
+                    msUsed = Environment.TickCount - tickBegin;
+                    mFlops = countMFlops * 1000 / msUsed;
+                    scale = mFlops / mFlopsBase;
+                    tw.WriteLine(indent + string.Format("SumVectorAvx:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                } catch (Exception ex) {
+                    tw.WriteLine("Run SumVectorAvx fail!");
+                    tw.WriteLine(ex);
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -179,6 +203,44 @@ namespace BenchmarkVector {
                 rt += dst[i];
             }
             return rt;
+        }
+
+        /// <summary>
+        /// Sum - Vector AVX.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="count">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVectorAvx(float[] src, int count, int loops) {
+#if Allow_Intrinsics
+            float rt = 0;
+            //const int VectorWidth = 256/32; // sizeof(__m256)/sizeof(float)
+            int VectorWidth = Vector256<float>.Count;
+            if (0 != count % VectorWidth) throw new ArgumentException(string.Format("The count can't div {0}.", VectorWidth), "count");
+            int vcount = count / VectorWidth;
+            float[] dst = new float[VectorWidth];
+            Vector256<float>[] vsrc = new Vector256<float>[vcount];
+            int p = 0;
+            for (int i = 0; i < vcount; ++i) {
+                vsrc[i] = Vector256.Create(src[p], src[p + 1], src[p + 2], src[p + 3], src[p + 4], src[p + 5], src[p + 6], src[p + 7]);
+                p += VectorWidth;
+            }
+            // body.
+            Vector256<float> vrt = Vector256<float>.Zero;
+            for (int j = 0; j < loops; ++j) {
+                for (int i = 0; i < vcount; ++i) {
+                    vrt = Avx.Add(vrt, vsrc[i]); // vrt += vsrc[i];
+                }
+            }
+            // reduce.
+            for (int i = 0; i < VectorWidth; ++i) {
+                rt += vrt.GetElement(i);
+            }
+            return rt;
+#else
+            throw new NotSupportedException();
+#endif
         }
     }
 }

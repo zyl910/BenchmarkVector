@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1778
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BenchmarkVector", "BenchmarkVector\BenchmarkVector.shproj", "{AACCECF2-B722-4658-A90A-775019AA8C3E}"
 EndProject
@@ -17,11 +17,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkVectorFw46", "Benc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkVectorFw46UseLib", "BenchmarkVectorFw46UseLib\BenchmarkVectorFw46UseLib.csproj", "{374F7A90-602D-4D7F-B5C0-AD78003D36B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkVectorCore30", "BenchmarkVectorCore30\BenchmarkVectorCore30.csproj", "{5BE0FAEB-0141-4CA9-B56C-32A235B80776}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		BenchmarkVector\BenchmarkVector.projitems*{0e99b640-2c08-44fc-aa8d-f85703ca33c2}*SharedItemsImports = 4
+		BenchmarkVector\BenchmarkVector.projitems*{5be0faeb-0141-4ca9-b56c-32a235b80776}*SharedItemsImports = 5
 		BenchmarkVector\BenchmarkVector.projitems*{a5c03d2e-e0b4-4b68-8c4a-a028cfbe4abb}*SharedItemsImports = 4
 		BenchmarkVector\BenchmarkVector.projitems*{aaccecf2-b722-4658-a90a-775019aa8c3e}*SharedItemsImports = 13
+		BenchmarkVector\BenchmarkVector.projitems*{c835d9c9-a746-4b8e-8b7f-ecffdb8ce2ba}*SharedItemsImports = 5
+		BenchmarkVector\BenchmarkVector.projitems*{cd4b763d-a8e2-4b03-a352-b0f050a9fac2}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +57,10 @@ Global
 		{374F7A90-602D-4D7F-B5C0-AD78003D36B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{374F7A90-602D-4D7F-B5C0-AD78003D36B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{374F7A90-602D-4D7F-B5C0-AD78003D36B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE0FAEB-0141-4CA9-B56C-32A235B80776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BE0FAEB-0141-4CA9-B56C-32A235B80776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE0FAEB-0141-4CA9-B56C-32A235B80776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BE0FAEB-0141-4CA9-B56C-32A235B80776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
