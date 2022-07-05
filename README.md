@@ -13,5 +13,5 @@ Project list:
 Benchmark functions:
 - SumBase: Sum - base.
 - SumVector4: Sum - Vector4.
-- SumVectorT: Sum - Vector<T>.
+- SumVectorT: Sum - `Vector<T>`.
 
