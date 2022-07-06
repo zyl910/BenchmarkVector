@@ -137,6 +137,13 @@ namespace BenchmarkVector {
                     mFlops = countMFlops * 1000 / msUsed;
                     scale = mFlops / mFlopsBase;
                     tw.WriteLine(indent + string.Format("SumVectorAvxSpan:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    // SumVectorAvxPtr.
+                    tickBegin = Environment.TickCount;
+                    rt = SumVectorAvxPtr(src, count, loops);
+                    msUsed = Environment.TickCount - tickBegin;
+                    mFlops = countMFlops * 1000 / msUsed;
+                    scale = mFlops / mFlopsBase;
+                    tw.WriteLine(indent + string.Format("SumVectorAvxPtr:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
                 } catch (Exception ex) {
                     tw.WriteLine("Run SumVectorAvx fail!");
                     tw.WriteLine(ex);
@@ -273,8 +280,8 @@ namespace BenchmarkVector {
         private static float SumVectorAvx(float[] src, int count, int loops) {
 #if Allow_Intrinsics
             float rt = 0; // Result.
-            //int VectorWidth = 32 / 4; // sizeof(__m256) / sizeof(float); // Block width.
-            int VectorWidth = Vector256<float>.Count;
+            //int VectorWidth = 32 / 4; // sizeof(__m256) / sizeof(float);
+            int VectorWidth = Vector256<float>.Count; // Block width.
             int nBlockWidth = VectorWidth; // Block width.
             int cntBlock = count / nBlockWidth; // Block count.
             int cntRem = count % nBlockWidth; // Remainder count.
@@ -285,7 +292,7 @@ namespace BenchmarkVector {
             Vector256<float>[] vsrc = new Vector256<float>[cntBlock];
             p = 0;
             for (i = 0; i < cntBlock; ++i) {
-                vsrc[i] = Vector256.Create(src[p], src[p + 1], src[p + 2], src[p + 3], src[p + 4], src[p + 5], src[p + 6], src[p + 7]); // Load. vsrc[i] = *p;
+                vsrc[i] = Vector256.Create(src[p], src[p + 1], src[p + 2], src[p + 3], src[p + 4], src[p + 5], src[p + 6], src[p + 7]); // Load.
                 p += VectorWidth;
             }
             // Body.
@@ -321,8 +328,7 @@ namespace BenchmarkVector {
         private static float SumVectorAvxSpan(float[] src, int count, int loops) {
 #if Allow_Intrinsics
             float rt = 0; // Result.
-            //int VectorWidth = 32 / 4; // sizeof(__m256) / sizeof(float); // Block width.
-            int VectorWidth = Vector256<float>.Count;
+            int VectorWidth = Vector256<float>.Count; // Block width.
             int nBlockWidth = VectorWidth; // Block width.
             int cntBlock = count / nBlockWidth; // Block count.
             int cntRem = count % nBlockWidth; // Remainder count.
@@ -330,13 +336,6 @@ namespace BenchmarkVector {
             int p; // Index for src data.
             ReadOnlySpan<Vector256<float>> pV; // Span for Vector.
             int i;
-            //// Load.
-            //Vector256<float>[] vsrc = new Vector256<float>[cntBlock];
-            //p = 0;
-            //for (i = 0; i < cntBlock; ++i) {
-            //    vsrc[i] = Vector256.Create(src[p], src[p + 1], src[p + 2], src[p + 3], src[p + 4], src[p + 5], src[p + 6], src[p + 7]); // Load. vsrc[i] = *p;
-            //    p += VectorWidth;
-            //}
             // Body.
             for (int j = 0; j < loops; ++j) {
                 p = 0;
@@ -356,6 +355,52 @@ namespace BenchmarkVector {
                 rt += vrt.GetElement(i);
             }
             return rt;
+#else
+            throw new NotSupportedException();
+#endif
+        }
+
+        /// <summary>
+        /// Sum - Vector AVX - Ptr.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="count">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVectorAvxPtr(float[] src, int count, int loops) {
+#if Allow_Intrinsics && UNSAFE
+            unsafe {
+                float rt = 0; // Result.
+                int VectorWidth = Vector256<float>.Count; // Block width.
+                int nBlockWidth = VectorWidth; // Block width.
+                int cntBlock = count / nBlockWidth; // Block count.
+                int cntRem = count % nBlockWidth; // Remainder count.
+                Vector256<float> vrt = Vector256<float>.Zero; // Vector result.
+                Vector256<float> vload;
+                float* p; // Pointer for src data.
+                int i;
+                // Body.
+                fixed(float* p0 = &src[0]) {
+                    for (int j = 0; j < loops; ++j) {
+                        p = p0;
+                        // Vector processs.
+                        for (i = 0; i < cntBlock; ++i) {
+                            vload = Avx.LoadVector256(p);    // Load. vload = *(*__m256)p;
+                            vrt = Avx.Add(vrt, vload);    // Add. vrt += vsrc[i];
+                            p += nBlockWidth;
+                        }
+                        // Remainder processs.
+                        for (i = 0; i < cntRem; ++i) {
+                            rt += p[i];
+                        }
+                    }
+                }
+                // Reduce.
+                for (i = 0; i < VectorWidth; ++i) {
+                    rt += vrt.GetElement(i);
+                }
+                return rt;
+            }
 #else
             throw new NotSupportedException();
 #endif

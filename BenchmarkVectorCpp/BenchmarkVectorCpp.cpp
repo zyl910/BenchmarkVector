@@ -69,7 +69,7 @@ float SumVectorAvx(const float* src, size_t count, int loops) {
         p = src;
         // Vector processs.
         for (i = 0; i < cntBlock; ++i) {
-            vload = _mm256_load_ps(p);    // Load. vload = *p;
+            vload = _mm256_load_ps(p);    // Load. vload = *(*__m256)p;
             vrt = _mm256_add_ps(vrt, vload);    // Add. vrt += vload;
             p += nBlockWidth;
         }
@@ -106,7 +106,7 @@ float SumVectorAvxU4(const float* src, size_t count, int loops) {
         p = src;
         // Block processs.
         for (i = 0; i < cntBlock; ++i) {
-            vload = _mm256_load_ps(p);    // Load. vload = *p;
+            vload = _mm256_load_ps(p);    // Load. vload = *(*__m256)p;
             vload1 = _mm256_load_ps(p + VectorWidth * 1);
             vload2 = _mm256_load_ps(p + VectorWidth * 2);
             vload3 = _mm256_load_ps(p + VectorWidth * 3);
