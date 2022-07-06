@@ -11,10 +11,10 @@
 #endif // !EXCEPTION_EXECUTE_HANDLER 
 
 // Sum - base.
-float SumBase(const float* src, int count, int loops) {
+float SumBase(const float* src, size_t count, int loops) {
     float rt = 0;
     for (int j = 0; j < loops; ++j) {
-        for (int i = 0; i < count; ++i) {
+        for (size_t i = 0; i < count; ++i) {
             rt += src[i];
         }
     }
@@ -22,15 +22,15 @@ float SumBase(const float* src, int count, int loops) {
 }
 
 // Sum - Vector AVX. Use _mm256_load_ps.
-float SumVectorAvx(const float* src, int count, int loops) {
+float SumVectorAvx(const float* src, size_t count, int loops) {
     float rt = 0;
-    const int VectorWidth = sizeof(__m256) / sizeof(float);
-    int vcount = count / VectorWidth;
+    const size_t VectorWidth = sizeof(__m256) / sizeof(float);
+    size_t vcount = count / VectorWidth;
     if (0 != count % VectorWidth) return rt;
     __m256 vrt = _mm256_setzero_ps();
     for (int j = 0; j < loops; ++j) {
         const float* p = src;
-        for (int i = 0; i < vcount; ++i) {
+        for (size_t i = 0; i < vcount; ++i) {
             __m256 b = _mm256_load_ps(p);
             vrt = _mm256_add_ps(vrt, b);
             p += VectorWidth;
@@ -46,10 +46,10 @@ float SumVectorAvx(const float* src, int count, int loops) {
 }
 
 // Sum - Vector AVX use pointer.
-float SumVectorAvxPtr(const float* src, int count, int loops) {
+float SumVectorAvxPtr(const float* src, size_t count, int loops) {
     float rt = 0;
     const int VectorWidth = sizeof(__m256) / sizeof(float);
-    int vcount = count / VectorWidth;
+    size_t vcount = count / VectorWidth;
     if (0 != count % VectorWidth) return rt;
     __m256 vrt = _mm256_setzero_ps();
     for (int j = 0; j < loops; ++j) {
@@ -124,6 +124,7 @@ void Benchmark() {
 int main() {
     printf("BenchmarkVectorCpp\n");
     printf("\n");
+    printf("Pointer size:\t%d\n", (int)(sizeof(void*)));
 #ifdef _DEBUG
     printf("IsRelease:\tFalse\n");
 #else

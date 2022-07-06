@@ -351,13 +351,14 @@ SumVectorAvx:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.976
 ```
 BenchmarkVectorCpp
 
+Pointer size:   8
 IsRelease:      True
 _MSC_VER:       1916
 __AVX__:        1
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
-SumBase:        6.87195e+10     # msUsed=4918, MFLOPS/s=832.858886
-SumVectorAvx:   5.49756e+11     # msUsed=620, MFLOPS/s=6606.451613, scale=7.932258
-SumVectorAvxPtr:        5.49756e+11     # msUsed=620, MFLOPS/s=6606.451613, scale=7.932258
+SumBase:        6.87195e+10     # msUsed=4962, MFLOPS/s=825.473599
+SumVectorAvx:   5.49756e+11     # msUsed=623, MFLOPS/s=6574.638844, scale=7.964687
+SumVectorAvxPtr:        5.49756e+11     # msUsed=624, MFLOPS/s=6564.102564, scale=7.951923
 ```
 
