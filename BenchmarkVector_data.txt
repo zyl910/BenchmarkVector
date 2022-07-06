@@ -311,14 +311,16 @@ Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft
 Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4938, MFLOPS/s=829.485621709194
-SumBaseU4:      2.748779E+11    # msUsed=1937, MFLOPS/s=2114.6102219927725, scale=2.5493030459473416
-SumVector4:     2.748779E+11    # msUsed=1219, MFLOPS/s=3360.1312551271535, scale=4.050861361771944
-SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.9008
-SumVectorAvx:   5.497558E+11    # msUsed=610, MFLOPS/s=6714.754098360656, scale=8.095081967213115
-SumVectorAvxSpan:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.9008
-SumVectorAvxPtr:        5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.108374384236454
-SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=156, MFLOPS/s=26256.410256410258, scale=31.653846153846157
+SumBase:        6.871948E+10    # msUsed=4922, MFLOPS/s=832.1820398212109
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.5333333333333, scale=2.6250666666666667
+SumVector4:     2.748779E+11    # msUsed=1235, MFLOPS/s=3316.5991902834007, scale=3.9854251012145747
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.082101806239738
+SumVectorAvx:   5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8752
+SumVectorAvxSpan:       5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.082101806239738
+SumVectorAvxPtr:        5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8752
+SumVectorAvxU4: 2.1990233E+12   # msUsed=313, MFLOPS/s=13086.261980830672, scale=15.72523961661342
+SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=328, MFLOPS/s=12487.80487804878, scale=15.00609756097561
+SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=156, MFLOPS/s=26256.410256410258, scale=31.551282051282055
 ```
 
 ### BenchmarkVectorCore30, Release, x86
