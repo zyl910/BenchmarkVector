@@ -311,10 +311,12 @@ Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft
 Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4969, MFLOPS/s=824.3107265043268
-SumVector4:     2.748779E+11    # msUsed=1250, MFLOPS/s=3276.8, scale=3.9752000000000005
-SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.159277504105091
-SumVectorAvx:   5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.950400000000001
+SumBase:        6.871948E+10    # msUsed=4937, MFLOPS/s=829.6536358112214
+SumBaseU4:      2.748779E+11    # msUsed=1860, MFLOPS/s=2202.1505376344085, scale=2.6543010752688168
+SumVector4:     2.748779E+11    # msUsed=1219, MFLOPS/s=3360.1312551271535, scale=4.050041017227235
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8992
+SumVectorAvx:   5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.106732348111658
+SumVectorAvxSpan:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8992
 ```
 
 ### BenchmarkVectorCore30, Release, x86

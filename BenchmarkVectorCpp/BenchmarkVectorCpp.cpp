@@ -64,7 +64,7 @@ float SumVectorAvx(const float* src, size_t count, int loops) {
     __m256 vload; // Vector load.
     const float* p; // Pointer for src data.
     size_t i;
-    // body.
+    // Body.
     for (int j = 0; j < loops; ++j) {
         p = src;
         // Vector processs.
@@ -101,7 +101,7 @@ float SumVectorAvxU4(const float* src, size_t count, int loops) {
     __m256 vload1, vload2, vload3;
     const float* p; // Pointer for src data.
     size_t i;
-    // body.
+    // Body.
     for (int j = 0; j < loops; ++j) {
         p = src;
         // Block processs.
