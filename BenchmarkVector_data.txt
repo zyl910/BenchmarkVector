@@ -357,8 +357,8 @@ _MSC_VER:       1916
 __AVX__:        1
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
-SumBase:        6.87195e+10     # msUsed=4962, MFLOPS/s=825.473599
-SumVectorAvx:   5.49756e+11     # msUsed=623, MFLOPS/s=6574.638844, scale=7.964687
-SumVectorAvxPtr:        5.49756e+11     # msUsed=624, MFLOPS/s=6564.102564, scale=7.951923
+SumBase:        6.87195e+10     # msUsed=4960, MFLOPS/s=825.806452
+SumVectorAvxOld:        5.49756e+11     # msUsed=626, MFLOPS/s=6543.130990, scale=7.923323
+SumVectorAvx:   5.49756e+11     # msUsed=622, MFLOPS/s=6585.209003, scale=7.974277
 ```
 
