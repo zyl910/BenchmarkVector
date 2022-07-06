@@ -358,7 +358,8 @@ __AVX__:        1
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
 SumBase:        6.87195e+10     # msUsed=4960, MFLOPS/s=825.806452
-SumVectorAvxOld:        5.49756e+11     # msUsed=626, MFLOPS/s=6543.130990, scale=7.923323
-SumVectorAvx:   5.49756e+11     # msUsed=622, MFLOPS/s=6585.209003, scale=7.974277
+SumBaseU4:      2.74878e+11     # msUsed=1236, MFLOPS/s=3313.915858, scale=4.012945
+SumVectorAvx:   5.49756e+11     # msUsed=623, MFLOPS/s=6574.638844, scale=7.961477
+SumVectorAvxU4: 2.19902e+12     # msUsed=247, MFLOPS/s=16582.995951, scale=20.080972
 ```
 

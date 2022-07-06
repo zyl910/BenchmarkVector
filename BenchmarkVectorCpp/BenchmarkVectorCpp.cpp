@@ -12,42 +12,50 @@
 
 // Sum - base.
 float SumBase(const float* src, size_t count, int loops) {
-    float rt = 0;
+    float rt = 0; // Result.
+    size_t i;
     for (int j = 0; j < loops; ++j) {
-        for (size_t i = 0; i < count; ++i) {
+        for (i = 0; i < count; ++i) {
             rt += src[i];
         }
     }
     return rt;
 }
 
-// Sum - Vector AVX.
-float SumVectorAvxOld(const float* src, size_t count, int loops) {
-    float rt = 0;
-    const size_t VectorWidth = sizeof(__m256) / sizeof(float);
-    size_t vcount = count / VectorWidth;
-    if (0 != count % VectorWidth) return rt;
-    __m256 vrt = _mm256_setzero_ps();
+// Sum - base - Loop unrolling *4.
+float SumBaseU4(const float* src, size_t count, int loops) {
+    float rt = 0; // Result.
+    float rt1=0;
+    float rt2 = 0;
+    float rt3 = 0;
+    size_t nBlockWidth = 4; // Block width.
+    size_t cntBlock = count / nBlockWidth; // Block count.
+    size_t cntRem = count % nBlockWidth; // Remainder count.
+    size_t idx; // Index for src data.
+    size_t i;
     for (int j = 0; j < loops; ++j) {
-        const float* p = src;
-        for (size_t i = 0; i < vcount; ++i) {
-            __m256 b = _mm256_load_ps(p);
-            vrt = _mm256_add_ps(vrt, b);
-            p += VectorWidth;
+        idx = 0;
+        // Block processs.
+        for (i = 0; i < cntBlock; ++i) {
+            rt += src[idx];
+            rt1 += src[idx + 1];
+            rt2 += src[idx + 2];
+            rt3 += src[idx + 3];
+            idx += nBlockWidth;
+        }
+        // Remainder processs.
+        for (i = 0; i < cntRem; ++i) {
+            rt += src[idx + i];
         }
     }
-    // reduce.
-    float dst[VectorWidth];
-    _mm256_storeu_ps(dst, vrt);
-    for (int i = 0; i < VectorWidth; ++i) {
-        rt += dst[i];
-    }
+    // Reduce.
+    rt = rt + rt1 + rt2 + rt3;
     return rt;
 }
 
 // Sum - Vector AVX.
 float SumVectorAvx(const float* src, size_t count, int loops) {
-    float rt = 0;    // Result.
+    float rt = 0; // Result.
     size_t VectorWidth = sizeof(__m256) / sizeof(float); // Block width.
     size_t nBlockWidth = VectorWidth; // Block width.
     size_t cntBlock = count / nBlockWidth; // Block count.
@@ -61,8 +69,8 @@ float SumVectorAvx(const float* src, size_t count, int loops) {
         p = src;
         // Vector processs.
         for (i = 0; i < cntBlock; ++i) {
-            vload = _mm256_load_ps(p);    // [AVX] Load.
-            vrt = _mm256_add_ps(vrt, vload);    // [AVX] Add.
+            vload = _mm256_load_ps(p);    // Load. vload = *p;
+            vrt = _mm256_add_ps(vrt, vload);    // Add. vrt += vload;
             p += nBlockWidth;
         }
         // Remainder processs.
@@ -78,25 +86,46 @@ float SumVectorAvx(const float* src, size_t count, int loops) {
     return rt;
 }
 
-// Sum - Vector AVX use pointer.
-float SumVectorAvxPtr(const float* src, size_t count, int loops) {
-    float rt = 0;
-    const int VectorWidth = sizeof(__m256) / sizeof(float);
-    size_t vcount = count / VectorWidth;
-    if (0 != count % VectorWidth) return rt;
-    __m256 vrt = _mm256_setzero_ps();
+// Sum - Vector AVX - Loop unrolling *4.
+float SumVectorAvxU4(const float* src, size_t count, int loops) {
+    float rt = 0;    // Result.
+    size_t VectorWidth = sizeof(__m256) / sizeof(float); // Block width.
+    size_t nBlockWidth = VectorWidth*4; // Block width.
+    size_t cntBlock = count / nBlockWidth; // Block count.
+    size_t cntRem = count % nBlockWidth; // Remainder count.
+    __m256 vrt = _mm256_setzero_ps(); // Vector result. [AVX] Set zero.
+    __m256 vrt1 = _mm256_setzero_ps();
+    __m256 vrt2 = _mm256_setzero_ps();
+    __m256 vrt3 = _mm256_setzero_ps();
+    __m256 vload; // Vector load.
+    __m256 vload1, vload2, vload3;
+    const float* p; // Pointer for src data.
+    size_t i;
+    // body.
     for (int j = 0; j < loops; ++j) {
-        const __m256* p = (const __m256*)src;
-        for (int i = 0; i < vcount; ++i) {
-            vrt = _mm256_add_ps(vrt, *p);
-            ++p;
+        p = src;
+        // Block processs.
+        for (i = 0; i < cntBlock; ++i) {
+            vload = _mm256_load_ps(p);    // Load. vload = *p;
+            vload1 = _mm256_load_ps(p + VectorWidth * 1);
+            vload2 = _mm256_load_ps(p + VectorWidth * 2);
+            vload3 = _mm256_load_ps(p + VectorWidth * 3);
+            vrt = _mm256_add_ps(vrt, vload);    // Add. vrt += vload;
+            vrt1 = _mm256_add_ps(vrt1, vload1);
+            vrt2 = _mm256_add_ps(vrt2, vload2);
+            vrt3 = _mm256_add_ps(vrt3, vload3);
+            p += nBlockWidth;
+        }
+        // Remainder processs.
+        for (i = 0; i < cntRem; ++i) {
+            rt += p[i];
         }
     }
-    // reduce.
-    float dst[VectorWidth];
-    _mm256_storeu_ps(dst, vrt);
-    for (int i = 0; i < VectorWidth; ++i) {
-        rt += dst[i];
+    // Reduce.
+    vrt = _mm256_add_ps(_mm256_add_ps(vrt, vrt1), _mm256_add_ps(vrt2, vrt3)); // vrt = vrt + vrt1 + vrt2 + vrt3;
+    p = (const float*)&vrt;
+    for (i = 0; i < VectorWidth; ++i) {
+        rt += p[i];
     }
     return rt;
 }
@@ -129,22 +158,29 @@ void Benchmark() {
     mFlops = countMFlops * CLOCKS_PER_SEC / msUsed;
     printf("SumBase:\t%g\t# msUsed=%d, MFLOPS/s=%f\n", rt, (int)msUsed, mFlops);
     double mFlopsBase = mFlops;
+    // SumBaseU4.
+    tickBegin = clock();
+    rt = SumBaseU4(src, count, loops);
+    msUsed = clock() - tickBegin;
+    mFlops = countMFlops * CLOCKS_PER_SEC / msUsed;
+    scale = mFlops / mFlopsBase;
+    printf("SumBaseU4:\t%g\t# msUsed=%d, MFLOPS/s=%f, scale=%f\n", rt, (int)msUsed, mFlops, scale);
     // SumVectorAvx.
     __try
     {
-        tickBegin = clock();
-        rt = SumVectorAvxOld(src, count, loops);
-        msUsed = clock() - tickBegin;
-        mFlops = countMFlops * CLOCKS_PER_SEC / msUsed;
-        scale = mFlops / mFlopsBase;
-        printf("SumVectorAvxOld:\t%g\t# msUsed=%d, MFLOPS/s=%f, scale=%f\n", rt, (int)msUsed, mFlops, scale);
-        // SumVectorAvx2.
         tickBegin = clock();
         rt = SumVectorAvx(src, count, loops);
         msUsed = clock() - tickBegin;
         mFlops = countMFlops * CLOCKS_PER_SEC / msUsed;
         scale = mFlops / mFlopsBase;
         printf("SumVectorAvx:\t%g\t# msUsed=%d, MFLOPS/s=%f, scale=%f\n", rt, (int)msUsed, mFlops, scale);
+        // SumVectorAvxU4.
+        tickBegin = clock();
+        rt = SumVectorAvxU4(src, count, loops);
+        msUsed = clock() - tickBegin;
+        mFlops = countMFlops * CLOCKS_PER_SEC / msUsed;
+        scale = mFlops / mFlopsBase;
+        printf("SumVectorAvxU4:\t%g\t# msUsed=%d, MFLOPS/s=%f, scale=%f\n", rt, (int)msUsed, mFlops, scale);
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
