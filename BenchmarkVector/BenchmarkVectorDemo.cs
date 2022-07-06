@@ -144,6 +144,15 @@ namespace BenchmarkVector {
                     mFlops = countMFlops * 1000 / msUsed;
                     scale = mFlops / mFlopsBase;
                     tw.WriteLine(indent + string.Format("SumVectorAvxPtr:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    // SumVectorAvxPtrU4.
+                    if (EnabledLoopUnrolling) {
+                        tickBegin = Environment.TickCount;
+                        rt = SumVectorAvxPtrU4(src, count, loops);
+                        msUsed = Environment.TickCount - tickBegin;
+                        mFlops = countMFlops * 1000 / msUsed;
+                        scale = mFlops / mFlopsBase;
+                        tw.WriteLine(indent + string.Format("SumVectorAvxPtrU4:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    }
                 } catch (Exception ex) {
                     tw.WriteLine("Run SumVectorAvx fail!");
                     tw.WriteLine(ex);
@@ -396,6 +405,65 @@ namespace BenchmarkVector {
                     }
                 }
                 // Reduce.
+                for (i = 0; i < VectorWidth; ++i) {
+                    rt += vrt.GetElement(i);
+                }
+                return rt;
+            }
+#else
+            throw new NotSupportedException();
+#endif
+        }
+
+        /// <summary>
+        /// Sum - Vector AVX - Ptr - Loop unrolling *4.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="count">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVectorAvxPtrU4(float[] src, int count, int loops) {
+#if Allow_Intrinsics && UNSAFE
+            unsafe {
+                float rt = 0; // Result.
+                int VectorWidth = Vector256<float>.Count; // Block width.
+                int nBlockWidth = VectorWidth * 4; // Block width.
+                int cntBlock = count / nBlockWidth; // Block count.
+                int cntRem = count % nBlockWidth; // Remainder count.
+                Vector256<float> vrt = Vector256<float>.Zero; // Vector result.
+                Vector256<float> vrt1 = Vector256<float>.Zero;
+                Vector256<float> vrt2 = Vector256<float>.Zero;
+                Vector256<float> vrt3 = Vector256<float>.Zero;
+                Vector256<float> vload;
+                Vector256<float> vload1;
+                Vector256<float> vload2;
+                Vector256<float> vload3;
+                float* p; // Pointer for src data.
+                int i;
+                // Body.
+                fixed (float* p0 = &src[0]) {
+                    for (int j = 0; j < loops; ++j) {
+                        p = p0;
+                        // Vector processs.
+                        for (i = 0; i < cntBlock; ++i) {
+                            vload = Avx.LoadVector256(p);    // Load. vload = *(*__m256)p;
+                            vload1 = Avx.LoadVector256(p + VectorWidth * 1);
+                            vload2 = Avx.LoadVector256(p + VectorWidth * 2);
+                            vload3 = Avx.LoadVector256(p + VectorWidth * 3);
+                            vrt = Avx.Add(vrt, vload);    // Add. vrt += vsrc[i];
+                            vrt1 = Avx.Add(vrt1, vload1);
+                            vrt2 = Avx.Add(vrt2, vload2);
+                            vrt3 = Avx.Add(vrt3, vload3);
+                            p += nBlockWidth;
+                        }
+                        // Remainder processs.
+                        for (i = 0; i < cntRem; ++i) {
+                            rt += p[i];
+                        }
+                    }
+                }
+                // Reduce.
+                vrt = Avx.Add(Avx.Add(vrt, vrt1), Avx.Add(vrt2, vrt3)); // vrt = vrt + vrt1 + vrt2 + vrt3;
                 for (i = 0; i < VectorWidth; ++i) {
                     rt += vrt.GetElement(i);
                 }
