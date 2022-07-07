@@ -131,6 +131,15 @@ namespace BenchmarkVector {
             mFlops = countMFlops * 1000 / msUsed;
             scale = mFlops / mFlopsBase;
             tw.WriteLine(indent + string.Format("SumVectorT:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+            // SumVectorTU4.
+            if (EnabledLoopUnrolling) {
+                tickBegin = Environment.TickCount;
+                rt = SumVectorTU4(src, count, loops);
+                msUsed = Environment.TickCount - tickBegin;
+                mFlops = countMFlops * 1000 / msUsed;
+                scale = mFlops / mFlopsBase;
+                tw.WriteLine(indent + string.Format("SumVectorTU4:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+            }
             // SumVectorAvx.
 #if Allow_Intrinsics
             if (Avx.IsSupported) {
@@ -367,6 +376,58 @@ namespace BenchmarkVector {
                 }
             }
             // Reduce.
+            for (i = 0; i < VectorWidth; ++i) {
+                rt += vrt[i];
+            }
+            return rt;
+        }
+
+        /// <summary>
+        /// Sum - Vector<T> - Loop unrolling *4.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="count">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVectorTU4(float[] src, int count, int loops) {
+            float rt = 0; // Result.
+            const int LoopUnrolling = 4;
+            int VectorWidth = Vector<float>.Count; // Block width.
+            int nBlockWidth = VectorWidth * LoopUnrolling; // Block width.
+            int cntBlock = count / nBlockWidth; // Block count.
+            int cntRem = count % nBlockWidth; // Remainder count.
+            Vector<float> vrt = Vector<float>.Zero; // Vector result.
+            Vector<float> vrt1 = Vector<float>.Zero;
+            Vector<float> vrt2 = Vector<float>.Zero;
+            Vector<float> vrt3 = Vector<float>.Zero;
+            int p; // Index for src data.
+            int i;
+            // Load.
+            Vector<float>[] vsrc = new Vector<float>[count / VectorWidth]; // Vector src.
+            p = 0;
+            for (i = 0; i < vsrc.Length; ++i) {
+                vsrc[i] = new Vector<float>(src, p);
+                p += VectorWidth;
+            }
+            // Body.
+            for (int j = 0; j < loops; ++j) {
+                p = 0;
+                // Vector processs.
+                for (i = 0; i < cntBlock; ++i) {
+                    vrt += vsrc[p]; // Add.
+                    vrt1 += vsrc[p + 1];
+                    vrt2 += vsrc[p + 1];
+                    vrt3 += vsrc[p + 1];
+                    p += LoopUnrolling;
+                }
+                // Remainder processs.
+                p = cntBlock * nBlockWidth;
+                for (i = 0; i < cntRem; ++i) {
+                    rt += src[p + i];
+                }
+            }
+            // Reduce.
+            vrt = vrt + vrt1 + vrt2 + vrt3;
             for (i = 0; i < VectorWidth; ++i) {
                 rt += vrt[i];
             }
