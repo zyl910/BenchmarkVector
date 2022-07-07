@@ -115,6 +115,15 @@ namespace BenchmarkVector {
             mFlops = countMFlops * 1000 / msUsed;
             scale = mFlops / mFlopsBase;
             tw.WriteLine(indent + string.Format("SumVector4:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+            // SumVector4U4.
+            if (EnabledLoopUnrolling) {
+                tickBegin = Environment.TickCount;
+                rt = SumVector4U4(src, count, loops);
+                msUsed = Environment.TickCount - tickBegin;
+                mFlops = countMFlops * 1000 / msUsed;
+                scale = mFlops / mFlopsBase;
+                tw.WriteLine(indent + string.Format("SumVector4U4:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+            }
             // SumVectorT.
             tickBegin = Environment.TickCount;
             rt = SumVectorT(src, count, loops);
@@ -209,21 +218,22 @@ namespace BenchmarkVector {
             int nBlockWidth = 4; // Block width.
             int cntBlock = count / nBlockWidth; // Block count.
             int cntRem = count % nBlockWidth; // Remainder count.
-            int idx; // Index for src data.
+            int p; // Index for src data.
             int i;
             for (int j = 0; j < loops; ++j) {
-                idx = 0;
+                p = 0;
                 // Block processs.
                 for (i = 0; i < cntBlock; ++i) {
-                    rt += src[idx];
-                    rt1 += src[idx + 1];
-                    rt2 += src[idx + 2];
-                    rt3 += src[idx + 3];
-                    idx += nBlockWidth;
+                    rt += src[p];
+                    rt1 += src[p + 1];
+                    rt2 += src[p + 2];
+                    rt3 += src[p + 3];
+                    p += nBlockWidth;
                 }
                 // Remainder processs.
+                //p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
-                    rt += src[idx + i];
+                    rt += src[p + i];
                 }
             }
             // Reduce.
@@ -256,18 +266,67 @@ namespace BenchmarkVector {
             }
             // Body.
             for (int j = 0; j < loops; ++j) {
-                p = 0;
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
                     vrt += vsrc[i]; // Add.
-                    p += nBlockWidth;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }
             }
             // Reduce.
+            rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
+            return rt;
+        }
+
+        /// <summary>
+        /// Sum - Vector4 - Loop unrolling *4.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="count">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVector4U4(float[] src, int count, int loops) {
+            float rt = 0; // Result.
+            const int LoopUnrolling = 4;
+            const int VectorWidth = 4;
+            int nBlockWidth = VectorWidth * LoopUnrolling; // Block width.
+            int cntBlock = count / nBlockWidth; // Block count.
+            int cntRem = count % nBlockWidth; // Remainder count.
+            Vector4 vrt = Vector4.Zero; // Vector result.
+            Vector4 vrt1 = Vector4.Zero;
+            Vector4 vrt2 = Vector4.Zero;
+            Vector4 vrt3 = Vector4.Zero;
+            int p; // Index for src data.
+            int i;
+            // Load.
+            Vector4[] vsrc = new Vector4[count / VectorWidth]; // Vector src.
+            p = 0;
+            for (i = 0; i < vsrc.Length; ++i) {
+                vsrc[i] = new Vector4(src[p], src[p + 1], src[p + 2], src[p + 3]);
+                p += VectorWidth;
+            }
+            // Body.
+            for (int j = 0; j < loops; ++j) {
+                p = 0;
+                // Vector processs.
+                for (i = 0; i < cntBlock; ++i) {
+                    vrt += vsrc[p]; // Add.
+                    vrt1 += vsrc[p + 1];
+                    vrt2 += vsrc[p + 2];
+                    vrt3 += vsrc[p + 3];
+                    p += LoopUnrolling;
+                }
+                // Remainder processs.
+                p = cntBlock * nBlockWidth;
+                for (i = 0; i < cntRem; ++i) {
+                    rt += src[p + i];
+                }
+            }
+            // Reduce.
+            vrt = vrt + vrt1 + vrt2 + vrt3;
             rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
             return rt;
         }
@@ -297,13 +356,12 @@ namespace BenchmarkVector {
             }
             // Body.
             for (int j = 0; j < loops; ++j) {
-                p = 0;
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
                     vrt += vsrc[i]; // Add.
-                    p += nBlockWidth;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }
@@ -342,13 +400,12 @@ namespace BenchmarkVector {
             }
             // Body.
             for (int j = 0; j < loops; ++j) {
-                p = 0;
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
                     vrt = Avx.Add(vrt, vsrc[i]);    // Add. vrt += vsrc[i];
-                    p += nBlockWidth;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }
@@ -392,20 +449,18 @@ namespace BenchmarkVector {
                 p += VectorWidth;
             }
             // Body.
-            int p2; // Index for vsrc data.
             for (int j = 0; j < loops; ++j) {
                 p = 0;
-                p2 = 0;
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
-                    vrt = Avx.Add(vrt, vsrc[p2]);    // Add. vrt += vsrc[p2];
-                    vrt1 = Avx.Add(vrt1, vsrc[p2 + 1]);
-                    vrt2 = Avx.Add(vrt2, vsrc[p2 + 2]);
-                    vrt3 = Avx.Add(vrt3, vsrc[p2 + 3]);
-                    p += nBlockWidth;
-                    p2 += LoopUnrolling;
+                    vrt = Avx.Add(vrt, vsrc[p]);    // Add. vrt += vsrc[p];
+                    vrt1 = Avx.Add(vrt1, vsrc[p + 1]);
+                    vrt2 = Avx.Add(vrt2, vsrc[p + 2]);
+                    vrt3 = Avx.Add(vrt3, vsrc[p + 3]);
+                    p += LoopUnrolling;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }
@@ -441,14 +496,13 @@ namespace BenchmarkVector {
             int i;
             // Body.
             for (int j = 0; j < loops; ++j) {
-                p = 0;
                 // Vector processs.
                 vsrc = System.Runtime.InteropServices.MemoryMarshal.Cast<float, Vector256<float> >(new Span<float>(src)); // Reinterpret cast. `float*` to `Vector256<float>*`.
                 for (i = 0; i < cntBlock; ++i) {
                     vrt = Avx.Add(vrt, vsrc[i]);    // Add. vrt += vsrc[i];
-                    p += nBlockWidth;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }
@@ -490,16 +544,15 @@ namespace BenchmarkVector {
                 p = 0;
                 // Vector processs.
                 vsrc = System.Runtime.InteropServices.MemoryMarshal.Cast<float, Vector256<float>>(new Span<float>(src)); // Reinterpret cast. `float*` to `Vector256<float>*`.
-                int p2 = 0; // Index for vsrc data.
                 for (i = 0; i < cntBlock; ++i) {
-                    vrt = Avx.Add(vrt, vsrc[p2]);    // Add. vrt += vsrc[p2];
-                    vrt1 = Avx.Add(vrt1, vsrc[p2 + 1]);
-                    vrt2 = Avx.Add(vrt2, vsrc[p2 + 2]);
-                    vrt3 = Avx.Add(vrt3, vsrc[p2 + 3]);
-                    p += nBlockWidth;
-                    p2 += LoopUnrolling;
+                    vrt = Avx.Add(vrt, vsrc[p]);    // Add. vrt += vsrc[p];
+                    vrt1 = Avx.Add(vrt1, vsrc[p + 1]);
+                    vrt2 = Avx.Add(vrt2, vsrc[p + 2]);
+                    vrt3 = Avx.Add(vrt3, vsrc[p + 3]);
+                    p += LoopUnrolling;
                 }
                 // Remainder processs.
+                p = cntBlock * nBlockWidth;
                 for (i = 0; i < cntRem; ++i) {
                     rt += src[p + i];
                 }

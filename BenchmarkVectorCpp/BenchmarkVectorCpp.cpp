@@ -31,21 +31,21 @@ float SumBaseU4(const float* src, size_t count, int loops) {
     size_t nBlockWidth = 4; // Block width.
     size_t cntBlock = count / nBlockWidth; // Block count.
     size_t cntRem = count % nBlockWidth; // Remainder count.
-    size_t idx; // Index for src data.
+    size_t p; // Index for src data.
     size_t i;
     for (int j = 0; j < loops; ++j) {
-        idx = 0;
+        p = 0;
         // Block processs.
         for (i = 0; i < cntBlock; ++i) {
-            rt += src[idx];
-            rt1 += src[idx + 1];
-            rt2 += src[idx + 2];
-            rt3 += src[idx + 3];
-            idx += nBlockWidth;
+            rt += src[p];
+            rt1 += src[p + 1];
+            rt2 += src[p + 2];
+            rt3 += src[p + 3];
+            p += nBlockWidth;
         }
         // Remainder processs.
         for (i = 0; i < cntRem; ++i) {
-            rt += src[idx + i];
+            rt += src[p + i];
         }
     }
     // Reduce.
