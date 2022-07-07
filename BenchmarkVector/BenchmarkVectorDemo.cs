@@ -8,10 +8,12 @@ using System.IO;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
+using System.Runtime.InteropServices;
 #if Allow_Intrinsics
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 #endif
+using System.Runtime.CompilerServices;
 
 namespace BenchmarkVector {
     /// <summary>
@@ -239,22 +241,33 @@ namespace BenchmarkVector {
         private static float SumVector4(float[] src, int count, int loops) {
             float rt = 0; // Result.
             const int VectorWidth = 4;
-            if (0 != count % VectorWidth) throw new ArgumentException("The count can't div 4.", "count");
-            int vcount = count / VectorWidth;
-            Vector4[] vsrc = new Vector4[vcount];
-            int p = 0;
-            for(int i=0; i< vcount; ++i) {
+            int nBlockWidth = VectorWidth; // Block width.
+            int cntBlock = count / nBlockWidth; // Block count.
+            int cntRem = count % nBlockWidth; // Remainder count.
+            Vector4 vrt = Vector4.Zero; // Vector result.
+            int p; // Index for src data.
+            int i;
+            // Load.
+            Vector4[] vsrc = new Vector4[cntBlock]; // Vector src.
+            p = 0;
+            for (i = 0; i < vsrc.Length; ++i) {
                 vsrc[i] = new Vector4(src[p], src[p + 1], src[p + 2], src[p + 3]);
                 p += VectorWidth;
             }
-            // body.
-            Vector4 vrt = Vector4.Zero;
+            // Body.
             for (int j = 0; j < loops; ++j) {
-                for (int i = 0; i < vcount; ++i) {
-                    vrt += vsrc[i];
+                p = 0;
+                // Vector processs.
+                for (i = 0; i < cntBlock; ++i) {
+                    vrt += vsrc[i]; // Add.
+                    p += nBlockWidth;
+                }
+                // Remainder processs.
+                for (i = 0; i < cntRem; ++i) {
+                    rt += src[p + i];
                 }
             }
-            // reduce.
+            // Reduce.
             rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
             return rt;
         }
@@ -268,27 +281,36 @@ namespace BenchmarkVector {
         /// <returns>Return the sum value.</returns>
         private static float SumVectorT(float[] src, int count, int loops) {
             float rt = 0; // Result.
-            int VectorWidth = Vector<float>.Count;
-            if (0 != count % VectorWidth) throw new ArgumentException(string.Format("The count can't div {0}.", VectorWidth), "count");
-            int vcount = count / VectorWidth;
-            float[] dst = new float[VectorWidth];
-            Vector<float>[] vsrc = new Vector<float>[vcount];
-            int p = 0;
-            for (int i = 0; i < vcount; ++i) {
+            int VectorWidth = Vector<float>.Count; // Block width.
+            int nBlockWidth = VectorWidth; // Block width.
+            int cntBlock = count / nBlockWidth; // Block count.
+            int cntRem = count % nBlockWidth; // Remainder count.
+            Vector<float> vrt = Vector<float>.Zero; // Vector result.
+            int p; // Index for src data.
+            int i;
+            // Load.
+            Vector<float>[] vsrc = new Vector<float>[cntBlock]; // Vector src.
+            p = 0;
+            for (i = 0; i < vsrc.Length; ++i) {
                 vsrc[i] = new Vector<float>(src, p);
                 p += VectorWidth;
             }
-            // body.
-            Vector<float> vrt = Vector<float>.Zero;
+            // Body.
             for (int j = 0; j < loops; ++j) {
-                for (int i = 0; i < vcount; ++i) {
-                    vrt += vsrc[i];
+                p = 0;
+                // Vector processs.
+                for (i = 0; i < cntBlock; ++i) {
+                    vrt += vsrc[i]; // Add.
+                    p += nBlockWidth;
+                }
+                // Remainder processs.
+                for (i = 0; i < cntRem; ++i) {
+                    rt += src[p + i];
                 }
             }
-            // reduce.
-            vrt.CopyTo(dst);
-            for (int i = 0; i < dst.Length; ++i) {
-                rt += dst[i];
+            // Reduce.
+            for (i = 0; i < VectorWidth; ++i) {
+                rt += vrt[i];
             }
             return rt;
         }
