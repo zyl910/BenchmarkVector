@@ -89,8 +89,9 @@ float SumVectorAvx(const float* src, size_t count, int loops) {
 // Sum - Vector AVX - Loop unrolling *4.
 float SumVectorAvxU4(const float* src, size_t count, int loops) {
     float rt = 0;    // Result.
+    const int LoopUnrolling = 4;
     size_t VectorWidth = sizeof(__m256) / sizeof(float); // Block width.
-    size_t nBlockWidth = VectorWidth*4; // Block width.
+    size_t nBlockWidth = VectorWidth * LoopUnrolling; // Block width.
     size_t cntBlock = count / nBlockWidth; // Block count.
     size_t cntRem = count % nBlockWidth; // Remainder count.
     __m256 vrt = _mm256_setzero_ps(); // Vector result. [AVX] Set zero.
