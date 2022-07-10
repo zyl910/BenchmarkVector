@@ -955,7 +955,7 @@ namespace BenchmarkVector {
                 // Reduce.
                 for (i = 1; i < LoopUnrolling; ++i) {
                     vrt[0] = Avx.Add(vrt[0], vrt[i]); // vrt[0] += vrt[i]
-                }
+                } // vrt = vrt + vrt1 + vrt2 + vrt3 + ... vrt15;
                 for (i = 0; i < VectorWidth; ++i) {
                     rt += vrt[0].GetElement(i);
                 }

@@ -352,26 +352,25 @@ Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
 Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
 Vector<T>.Assembly.CodeBase:    file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Private.CoreLib.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4953, MFLOPS/s=826.9735513830002
-SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.5333333333333, scale=2.6416
-SumVector4:     2.748779E+11    # msUsed=1219, MFLOPS/s=3360.1312551271535, scale=4.063166529942576
-SumVector4U4:   1.0995116E+12   # msUsed=515, MFLOPS/s=7953.398058252427, scale=9.61747572815534
-SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.9248
-SumVectorTU4:   2.1990233E+12   # msUsed=203, MFLOPS/s=20177.339901477833, scale=24.399014778325125
-SumVectorAvx:   5.497558E+11    # msUsed=610, MFLOPS/s=6714.754098360656, scale=8.11967213114754
-SumVectorAvxSpan:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.9248
-SumVectorAvxPtr:        5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.133004926108374
-SumVectorAvxU4: 2.1990233E+12   # msUsed=328, MFLOPS/s=12487.80487804878, scale=15.100609756097562
-SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=313, MFLOPS/s=13086.261980830672, scale=15.824281150159745
-SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=172, MFLOPS/s=23813.95348837209, scale=28.796511627906977
-SumVectorAvxPtrU16:     8.386202E+12    # msUsed=203, MFLOPS/s=20177.339901477833, scale=24.399014778325125
-SumVectorAvxPtrU16A:    8.3862026E+12   # msUsed=265, MFLOPS/s=15456.603773584906, scale=18.69056603773585
-SumVectorAvxPtrUX[4]:   2.1990233E+12   # msUsed=532, MFLOPS/s=7699.248120300752, scale=9.31015037593985
-SumVectorAvxPtrUX[8]:   4.3980465E+12   # msUsed=500, MFLOPS/s=8192, scale=9.906
-SumVectorAvxPtrUX[16]:  8.3862026E+12   # msUsed=500, MFLOPS/s=8192, scale=9.906
+SumBase:        6.871948E+10    # msUsed=4938, MFLOPS/s=829.485621709194
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.5333333333333, scale=2.6336
+SumVector4:     2.748779E+11    # msUsed=1218, MFLOPS/s=3362.8899835796387, scale=4.054187192118227
+SumVector4U4:   1.0995116E+12   # msUsed=532, MFLOPS/s=7699.248120300752, scale=9.281954887218046
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.108374384236454
+SumVectorTU4:   2.1990233E+12   # msUsed=203, MFLOPS/s=20177.339901477833, scale=24.32512315270936
+SumVectorAvx:   5.497558E+11    # msUsed=609, MFLOPS/s=6725.7799671592775, scale=8.108374384236454
+SumVectorAvxSpan:       5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.9008
+SumVectorAvxPtr:        5.497558E+11    # msUsed=610, MFLOPS/s=6714.754098360656, scale=8.095081967213115
+SumVectorAvxU4: 2.1990233E+12   # msUsed=328, MFLOPS/s=12487.80487804878, scale=15.054878048780488
+SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=312, MFLOPS/s=13128.205128205129, scale=15.826923076923078
+SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=157, MFLOPS/s=26089.171974522294, scale=31.452229299363058
+SumVectorAvxPtrU16:     8.386202E+12    # msUsed=125, MFLOPS/s=32768, scale=39.504
+SumVectorAvxPtrU16A:    8.3862026E+12   # msUsed=187, MFLOPS/s=21903.74331550802, scale=26.406417112299465
+SumVectorAvxPtrUX[4]:   2.1990233E+12   # msUsed=547, MFLOPS/s=7488.117001828154, scale=9.027422303473491
+SumVectorAvxPtrUX[8]:   4.3980465E+12   # msUsed=500, MFLOPS/s=8192, scale=9.876
+SumVectorAvxPtrUX[16]:  8.3862026E+12   # msUsed=500, MFLOPS/s=8192, scale=9.876
 ```
 
 ### BenchmarkVectorCore30, Release, x86
@@ -422,10 +421,15 @@ _MSC_VER:       1916
 __AVX__:        1
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
-SumBase:        6.87195e+10     # msUsed=5016, MFLOPS/s=816.586922
-SumBaseU4:      2.74878e+11     # msUsed=1255, MFLOPS/s=3263.745020, scale=3.996813
-SumVectorAvx:   5.49756e+11     # msUsed=623, MFLOPS/s=6574.638844, scale=8.051364
-SumVectorAvxU4: 2.19902e+12     # msUsed=156, MFLOPS/s=26256.410256, scale=32.153846
+SumBase:        6.87195e+10     # msUsed=4942, MFLOPS/s=828.814245
+SumBaseU4:      2.74878e+11     # msUsed=1246, MFLOPS/s=3287.319422, scale=3.966292
+SumVectorAvx:   5.49756e+11     # msUsed=615, MFLOPS/s=6660.162602, scale=8.035772
+SumVectorAvxU4: 2.19902e+12     # msUsed=154, MFLOPS/s=26597.402597, scale=32.090909
+SumVectorAvxU16:        8.3862e+12      # msUsed=151, MFLOPS/s=27125.827815, scale=32.728477
+SumVectorAvxU16A:       8.3862e+12      # msUsed=155, MFLOPS/s=26425.806452, scale=31.883871
+SumVectorAvxUX[4]:      2.19902e+12     # msUsed=390, MFLOPS/s=10502.564103, scale=12.671795
+SumVectorAvxUX[8]:      4.39805e+12     # msUsed=275, MFLOPS/s=14894.545455, scale=17.970909
+SumVectorAvxUX[16]:     8.3862e+12      # msUsed=264, MFLOPS/s=15515.151515, scale=18.719697
 ```
 
 ### BenchmarkVectorCpp, x64
@@ -438,9 +442,14 @@ _MSC_VER:       1916
 __AVX__:        1
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096.000000
-SumBase:        6.87195e+10     # msUsed=4960, MFLOPS/s=825.806452
-SumBaseU4:      2.74878e+11     # msUsed=1236, MFLOPS/s=3313.915858, scale=4.012945
-SumVectorAvx:   5.49756e+11     # msUsed=623, MFLOPS/s=6574.638844, scale=7.961477
-SumVectorAvxU4: 2.19902e+12     # msUsed=247, MFLOPS/s=16582.995951, scale=20.080972
+SumBase:        6.87195e+10     # msUsed=4938, MFLOPS/s=829.485622
+SumBaseU4:      2.74878e+11     # msUsed=1229, MFLOPS/s=3332.790887, scale=4.017901
+SumVectorAvx:   5.49756e+11     # msUsed=616, MFLOPS/s=6649.350649, scale=8.016234
+SumVectorAvxU4: 2.19902e+12     # msUsed=247, MFLOPS/s=16582.995951, scale=19.991903
+SumVectorAvxU16:        8.3862e+12      # msUsed=89, MFLOPS/s=46022.471910, scale=55.483146
+SumVectorAvxU16A:       8.3862e+12      # msUsed=89, MFLOPS/s=46022.471910, scale=55.483146
+SumVectorAvxUX[4]:      2.19902e+12     # msUsed=465, MFLOPS/s=8808.602151, scale=10.619355
+SumVectorAvxUX[8]:      4.39805e+12     # msUsed=336, MFLOPS/s=12190.476190, scale=14.696429
+SumVectorAvxUX[16]:     8.3862e+12      # msUsed=323, MFLOPS/s=12681.114551, scale=15.287926
 ```
 
