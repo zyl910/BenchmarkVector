@@ -15,7 +15,7 @@ namespace BenchmarkVectorFw46 {
             tw.WriteLine("BenchmarkVectorFw46");
             tw.WriteLine();
             BenchmarkVectorDemo.OutputEnvironment(tw, indent);
-            tw.WriteLine(string.Format("Main-Vector4.Assembly.CodeBase:\t{0}", typeof(Vector4).Assembly.CodeBase));
+            //tw.WriteLine(string.Format("Main-Vector4.Assembly.CodeBase:\t{0}", typeof(Vector4).Assembly.CodeBase));
             tw.WriteLine(indent);
             BenchmarkVectorDemo.Benchmark(tw, indent);
         }

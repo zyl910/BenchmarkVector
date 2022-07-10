@@ -11,7 +11,7 @@ namespace BenchmarkVectorCore20UseLib {
             tw.WriteLine("BenchmarkVectorCore20UseLib");
             tw.WriteLine();
             BenchmarkVectorUtil.OutputEnvironment(tw, indent);
-            tw.WriteLine(string.Format("Main-Vector4.Assembly.CodeBase:\t{0}", typeof(Vector4).Assembly.CodeBase));
+            //tw.WriteLine(string.Format("Main-Vector4.Assembly.CodeBase:\t{0}", typeof(Vector4).Assembly.CodeBase));
             tw.WriteLine(indent);
             BenchmarkVectorUtil.Benchmark(tw, indent);
         }
