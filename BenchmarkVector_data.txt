@@ -22,14 +22,16 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=11297, MFLOPS/s=362.574134726033
-SumVector4:     2.748779E+11    # msUsed=4391, MFLOPS/s=932.817125939422, scale=2.57276246868595
-SumVectorT:     5.497558E+11    # msUsed=2703, MFLOPS/s=1515.35331113578, scale=4.17943026267111
+SumBase:        6.871948E+10    # msUsed=11125, MFLOPS/s=368.179775280899
+SumBaseU4:      2.748779E+11    # msUsed=6156, MFLOPS/s=665.367121507472, scale=1.80717998700455
+SumVector4:     2.748779E+11    # msUsed=4328, MFLOPS/s=946.395563770795, scale=2.57047134935305
+SumVector4U4:   1.099512E+12    # msUsed=2000, MFLOPS/s=2048, scale=5.5625
+SumVectorT:     5.497558E+11    # msUsed=2469, MFLOPS/s=1658.97124341839, scale=4.50587282300526
+SumVectorTU4:   2.199023E+12    # msUsed=984, MFLOPS/s=4162.60162601626, scale=11.3058943089431
 ```
 
 ### BenchmarkVectorCore20, Release, x64
@@ -51,14 +53,16 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4969, MFLOPS/s=824.310726504327
-SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.02674230145867
-SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.15927750410509
+SumBase:        6.871948E+10    # msUsed=4937, MFLOPS/s=829.653635811221
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.53333333333, scale=2.63306666666667
+SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.00081037277147
+SumVector4U4:   1.099512E+12    # msUsed=500, MFLOPS/s=8192, scale=9.874
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8992
+SumVectorTU4:   2.199023E+12    # msUsed=188, MFLOPS/s=21787.2340425532, scale=26.2606382978723
 ```
 
 ### BenchmarkVectorCore20UseLib, Release, x64
@@ -81,17 +85,16 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/2.0.9/System.Numerics.Vectors.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=5000, MFLOPS/s=819.2
-SumBaseU4:      2.748779E+11    # msUsed=1906, MFLOPS/s=2149.00314795383, scale=2.62329485834208
-SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.05186385737439
-SumVector4U4:   1.099512E+12    # msUsed=516, MFLOPS/s=7937.98449612403, scale=9.68992248062015
-SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=8
-SumVectorTU4:   2.199023E+12    # msUsed=203, MFLOPS/s=20177.3399014778, scale=24.6305418719212
+SumBase:        6.871948E+10    # msUsed=4906, MFLOPS/s=834.896045658377
+SumBaseU4:      2.748779E+11    # msUsed=1859, MFLOPS/s=2203.33512641205, scale=2.63905325443787
+SumVector4:     2.748779E+11    # msUsed=1219, MFLOPS/s=3360.13125512715, scale=4.02461033634126
+SumVector4U4:   1.099512E+12    # msUsed=516, MFLOPS/s=7937.98449612403, scale=9.5077519379845
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8496
+SumVectorTU4:   2.199023E+12    # msUsed=187, MFLOPS/s=21903.743315508, scale=26.2352941176471
 ```
 
 ### BenchmarkVectorFw45, Release, x64
@@ -112,13 +115,16 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
-Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/common/vscsprojects/vs15_2017/NStd/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=5032, MFLOPS/s=813.990461049285
-SumVector4:     2.748779E+11    # msUsed=1250, MFLOPS/s=3276.8, scale=4.0256
-SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=8.0512
+SumBase:        6.871948E+10    # msUsed=4922, MFLOPS/s=832.182039821211
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.53333333333, scale=2.62506666666667
+SumVector4:     2.748779E+11    # msUsed=1235, MFLOPS/s=3316.5991902834, scale=3.98542510121457
+SumVector4U4:   1.099512E+12    # msUsed=562, MFLOPS/s=7288.25622775801, scale=8.75800711743772
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8752
+SumVectorTU4:   2.199023E+12    # msUsed=188, MFLOPS/s=21787.2340425532, scale=26.1808510638298
 ```
 
 ### BenchmarkVectorFw45, Release, x86
@@ -139,13 +145,16 @@ Vector.IsHardwareAccelerated:   False
 Vector<byte>.Count:     16      # 128bit
 Vector<float>.Count:    4       # 128bit
 Vector<double>.Count:   2       # 128bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
-Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/common/vscsprojects/vs15_2017/NStd/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+Vector4.Assembly.CodeBase:      file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
+Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw45/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        8.38656E+12     # msUsed=3766, MFLOPS/s=1087.62612851832
-SumVector4:     2.748779E+11    # msUsed=3500, MFLOPS/s=1170.28571428571, scale=1.076
-SumVectorT:     2.748779E+11    # msUsed=19422, MFLOPS/s=210.894861497271, scale=0.193903820409844
+SumBase:        8.38656E+12     # msUsed=3688, MFLOPS/s=1110.62906724512
+SumBaseU4:      8.38656E+12     # msUsed=1719, MFLOPS/s=2382.78068644561, scale=2.14543339150669
+SumVector4:     2.748779E+11    # msUsed=4640, MFLOPS/s=882.758620689655, scale=0.794827586206896
+SumVector4U4:   1.099512E+12    # msUsed=9188, MFLOPS/s=445.798868088812, scale=0.401393121462778
+SumVectorT:     2.748779E+11    # msUsed=19187, MFLOPS/s=213.477875644968, scale=0.192213477875645
+SumVectorTU4:   1.099512E+12    # msUsed=18813, MFLOPS/s=217.721788125233, scale=0.196034656886196
 ```
 
 ### BenchmarkVectorFw46, Release, x86
@@ -166,14 +175,16 @@ Vector.IsHardwareAccelerated:   False
 Vector<byte>.Count:     16      # 128bit
 Vector<float>.Count:    4       # 128bit
 Vector<double>.Count:   2       # 128bit
-Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw46/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        8.38656E+12     # msUsed=3750, MFLOPS/s=1092.26666666667
-SumVector4:     2.748779E+11    # msUsed=3469, MFLOPS/s=1180.74373018161, scale=1.08100317094263
-SumVectorT:     2.748779E+11    # msUsed=19766, MFLOPS/s=207.224526965496, scale=0.189719720732571
+SumBase:        8.38656E+12     # msUsed=3719, MFLOPS/s=1101.37133638075
+SumBaseU4:      8.38656E+12     # msUsed=1719, MFLOPS/s=2382.78068644561, scale=2.16346713205352
+SumVector4:     2.748779E+11    # msUsed=4656, MFLOPS/s=879.725085910653, scale=0.798754295532646
+SumVector4U4:   1.099512E+12    # msUsed=9234, MFLOPS/s=443.578081004982, scale=0.402750703920295
+SumVectorT:     2.748779E+11    # msUsed=19157, MFLOPS/s=213.812183536044, scale=0.194132693010388
+SumVectorTU4:   1.099512E+12    # msUsed=18781, MFLOPS/s=218.09275331452, scale=0.198019274798999
 ```
 
 ### BenchmarkVectorFw46, Release, x64
@@ -194,14 +205,16 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw46/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4985, MFLOPS/s=821.664994984955
-SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=4.03970826580227
-SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.976
+SumBase:        6.871948E+10    # msUsed=4922, MFLOPS/s=832.182039821211
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.53333333333, scale=2.62506666666667
+SumVector4:     2.748779E+11    # msUsed=1218, MFLOPS/s=3362.88998357964, scale=4.04105090311987
+SumVector4U4:   1.099512E+12    # msUsed=516, MFLOPS/s=7937.98449612403, scale=9.53875968992248
+SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.08210180623974
+SumVectorTU4:   2.199023E+12    # msUsed=188, MFLOPS/s=21787.2340425532, scale=26.1808510638298
 ```
 
 ### BenchmarkVectorFw46UseLib, Release, x64
@@ -227,12 +240,12 @@ Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MS
 Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw46UseLib/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=5015, MFLOPS/s=816.749750747757
-SumBaseU4:      2.748779E+11    # msUsed=1906, MFLOPS/s=2149.00314795383, scale=2.6311647429171
-SumVector4:     2.748779E+11    # msUsed=1235, MFLOPS/s=3316.5991902834, scale=4.06072874493927
-SumVector4U4:   1.099512E+12    # msUsed=515, MFLOPS/s=7953.39805825243, scale=9.7378640776699
-SumVectorT:     5.497558E+11    # msUsed=610, MFLOPS/s=6714.75409836066, scale=8.22131147540984
-SumVectorTU4:   2.199023E+12    # msUsed=203, MFLOPS/s=20177.3399014778, scale=24.7044334975369
+SumBase:        6.871948E+10    # msUsed=4922, MFLOPS/s=832.182039821211
+SumBaseU4:      2.748779E+11    # msUsed=1844, MFLOPS/s=2221.25813449024, scale=2.66919739696312
+SumVector4:     2.748779E+11    # msUsed=1234, MFLOPS/s=3319.2868719611, scale=3.98865478119935
+SumVector4U4:   1.099512E+12    # msUsed=500, MFLOPS/s=8192, scale=9.844
+SumVectorT:     5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.8752
+SumVectorTU4:   2.199023E+12    # msUsed=187, MFLOPS/s=21903.743315508, scale=26.3208556149733
 ```
 
 ### BenchmarkVectorFw46UseLib, Release, x86
@@ -243,24 +256,69 @@ IsRelease:      True
 EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
 Environment.ProcessorCount:     8
 Environment.Is64BitOperatingSystem:     True
-Environment.Is64BitProcess:     True
+Environment.Is64BitProcess:     False
 Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
 Environment.Version:    4.0.30319.42000
-RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\
+RuntimeEnvironment.GetRuntimeDirectory: C:\Windows\Microsoft.NET\Framework\v4.0.30319\
 RuntimeInformation.FrameworkDescription:        .NET Framework 4.8.4515.0
 BitConverter.IsLittleEndian:    True
-IntPtr.Size:    8
-Vector.IsHardwareAccelerated:   True
-Vector<byte>.Count:     32      # 256bit
-Vector<float>.Count:    8       # 256bit
-Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+IntPtr.Size:    4
+Vector.IsHardwareAccelerated:   False
+Vector<byte>.Count:     16      # 128bit
+Vector<float>.Count:    4       # 128bit
+Vector<double>.Count:   2       # 128bit
 Vector4.Assembly.CodeBase:      file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Numerics/v4.0_4.0.0.0__b77a5c561934e089/System.Numerics.dll
+Vector<T>.Assembly.CodeBase:    file:///E:/zylSelf/Code/cs/base/BenchmarkVector/BenchmarkVectorFw46UseLib/bin/Release/System.Numerics.Vectors.DLL
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4984, MFLOPS/s=821.829855537721
-SumVector4:     2.748779E+11    # msUsed=1250, MFLOPS/s=3276.8, scale=3.9872
-SumVectorT:     5.497558E+11    # msUsed=609, MFLOPS/s=6725.77996715928, scale=8.18390804597701
+SumBase:        8.38656E+12     # msUsed=3687, MFLOPS/s=1110.93029563331
+SumBaseU4:      8.38656E+12     # msUsed=1719, MFLOPS/s=2382.78068644561, scale=2.14485165794066
+SumVector4:     2.748779E+11    # msUsed=4641, MFLOPS/s=882.568411980177, scale=0.794440853264383
+SumVector4U4:   1.099512E+12    # msUsed=10656, MFLOPS/s=384.384384384384, scale=0.346002252252252
+SumVectorT:     2.748779E+11    # msUsed=24719, MFLOPS/s=165.702496055666, scale=0.14915651927667
+SumVectorTU4:   1.099512E+12    # msUsed=19187, MFLOPS/s=213.477875644968, scale=0.192161359253661
+```
+
+### BenchmarkVectorCore30, Debug, x86
+```
+BenchmarkVectorCore30
+
+IsRelease:      False
+EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+Environment.ProcessorCount:     8
+Environment.Is64BitOperatingSystem:     True
+Environment.Is64BitProcess:     False
+Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
+Environment.Version:    3.1.26
+RuntimeEnvironment.GetRuntimeDirectory: C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App\3.1.26\
+RuntimeInformation.FrameworkDescription:        .NET Core 3.1.26
+BitConverter.IsLittleEndian:    True
+IntPtr.Size:    4
+Vector.IsHardwareAccelerated:   True
+Vector<byte>.Count:     32      # 256bit
+Vector<float>.Count:    8       # 256bit
+Vector<double>.Count:   4       # 256bit
+Vector4.Assembly.CodeBase:      file:///C:/Program Files (x86)/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files (x86)/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Private.CoreLib.dll
+
+Benchmark:      count=4096, loops=1000000, countMFlops=4096
+SumBase:        6.871948E+10    # msUsed=11125, MFLOPS/s=368.17977528089887
+SumBaseU4:      2.748779E+11    # msUsed=5078, MFLOPS/s=806.6167782591572, scale=2.1908231587239073
+SumVector4:     2.748779E+11    # msUsed=4985, MFLOPS/s=821.6649949849549, scale=2.2316950852557675
+SumVector4U4:   1.0995116E+12   # msUsed=1844, MFLOPS/s=2221.2581344902387, scale=6.033080260303688
+SumVectorT:     5.497558E+11    # msUsed=2625, MFLOPS/s=1560.3809523809523, scale=4.238095238095238
+SumVectorTU4:   2.1990233E+12   # msUsed=859, MFLOPS/s=4768.335273573924, scale=12.951105937136207
+SumVectorAvx:   5.497558E+11    # msUsed=2687, MFLOPS/s=1524.3766282098995, scale=4.140305173055452
+SumVectorAvxSpan:       5.497558E+11    # msUsed=3610, MFLOPS/s=1134.6260387811635, scale=3.081717451523546
+SumVectorAvxPtr:        5.497558E+11    # msUsed=2469, MFLOPS/s=1658.971243418388, scale=4.505872823005265
+SumVectorAvxU4: 2.1990233E+12   # msUsed=890, MFLOPS/s=4602.247191011236, scale=12.500000000000002
+SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=1406, MFLOPS/s=2913.2290184921762, scale=7.912517780938833
+SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=1313, MFLOPS/s=3119.5734958111198, scale=8.472962680883473
+SumVectorAvxPtrU16:     8.386202E+12    # msUsed=1469, MFLOPS/s=2788.291354663036, scale=7.573179033356025
+SumVectorAvxPtrU16A:    8.3862026E+12   # msUsed=1500, MFLOPS/s=2730.6666666666665, scale=7.416666666666666
+SumVectorAvxPtrUX[4]:   2.1990233E+12   # msUsed=2547, MFLOPS/s=1608.166470357283, scale=4.367883784844915
+SumVectorAvxPtrUX[8]:   4.3980465E+12   # msUsed=2375, MFLOPS/s=1724.6315789473683, scale=4.684210526315789
+SumVectorAvxPtrUX[16]:  8.3862026E+12   # msUsed=2297, MFLOPS/s=1783.195472355246, scale=4.843273835437527
 ```
 
 ### BenchmarkVectorCore30, Debug, x64
@@ -282,53 +340,27 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Private.CoreLib.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=11563, MFLOPS/s=354.2333304505751
-SumVector4:     2.748779E+11    # msUsed=4453, MFLOPS/s=919.8293285425556, scale=2.596676397933977
-SumVectorT:     5.497558E+11    # msUsed=2703, MFLOPS/s=1515.3533111357751, scale=4.277839437661857
-SumVectorAvx:       5.497558E+11    # msUsed=2891, MFLOPS/s=1416.8107921134556, scale=3.9996540989277065
-```
-
-### BenchmarkVectorCore30, Debug, x64
-```
-BenchmarkVectorCore30
-
-IsRelease:      False
-EnvironmentVariable(PROCESSOR_IDENTIFIER):      Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
-Environment.ProcessorCount:     8
-Environment.Is64BitOperatingSystem:     True
-Environment.Is64BitProcess:     True
-Environment.OSVersion:  Microsoft Windows NT 6.2.9200.0
-Environment.Version:    3.1.26
-RuntimeEnvironment.GetRuntimeDirectory: C:\Program Files\dotnet\shared\Microsoft.NETCore.App\3.1.26\
-RuntimeInformation.FrameworkDescription:        .NET Core 3.1.26
-BitConverter.IsLittleEndian:    True
-IntPtr.Size:    8
-Vector.IsHardwareAccelerated:   True
-Vector<byte>.Count:     32      # 256bit
-Vector<float>.Count:    8       # 256bit
-Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
-Vector4.Assembly.CodeBase:      file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
-
-Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=11297, MFLOPS/s=362.57413472603344
-SumBaseU4:      2.748779E+11    # msUsed=5203, MFLOPS/s=787.2381318470113, scale=2.1712473572938693
-SumVector4:     2.748779E+11    # msUsed=4375, MFLOPS/s=936.2285714285714, scale=2.582171428571429
-SumVector4U4:   1.0995116E+12   # msUsed=1672, MFLOPS/s=2449.7607655502393, scale=6.756578947368421
-SumVectorT:     5.497558E+11    # msUsed=2484, MFLOPS/s=1648.9533011272142, scale=4.547906602254429
-SumVectorTU4:   2.1990233E+12   # msUsed=859, MFLOPS/s=4768.335273573924, scale=13.151338766006987
-SumVectorAvx:   5.497558E+11    # msUsed=2500, MFLOPS/s=1638.4, scale=4.518800000000001
-SumVectorAvxSpan:       5.497558E+11    # msUsed=3485, MFLOPS/s=1175.3228120516499, scale=3.241606886657102
-SumVectorAvxPtr:        5.497558E+11    # msUsed=2515, MFLOPS/s=1628.6282306163023, scale=4.491848906560636
-SumVectorAvxU4: 2.1990233E+12   # msUsed=1000, MFLOPS/s=4096, scale=11.297
-SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=1344, MFLOPS/s=3047.6190476190477, scale=8.405505952380953
-SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=1219, MFLOPS/s=3360.1312551271535, scale=9.267432321575063
+SumBase:        6.871948E+10    # msUsed=11078, MFLOPS/s=369.74183065535294
+SumBaseU4:      2.748779E+11    # msUsed=5046, MFLOPS/s=811.7320650019818, scale=2.195402298850575
+SumVector4:     2.748779E+11    # msUsed=4329, MFLOPS/s=946.1769461769462, scale=2.559020559020559
+SumVector4U4:   1.0995116E+12   # msUsed=1594, MFLOPS/s=2569.636135508156, scale=6.949811794228357
+SumVectorT:     5.497558E+11    # msUsed=2469, MFLOPS/s=1658.971243418388, scale=4.486836776022681
+SumVectorTU4:   2.1990233E+12   # msUsed=859, MFLOPS/s=4768.335273573924, scale=12.896391152502911
+SumVectorAvx:   5.497558E+11    # msUsed=2469, MFLOPS/s=1658.971243418388, scale=4.486836776022681
+SumVectorAvxSpan:       5.497558E+11    # msUsed=3453, MFLOPS/s=1186.2148856067188, scale=3.208224732117
+SumVectorAvxPtr:        5.497558E+11    # msUsed=2469, MFLOPS/s=1658.971243418388, scale=4.486836776022681
+SumVectorAvxU4: 2.1990233E+12   # msUsed=968, MFLOPS/s=4231.4049586776855, scale=11.444214876033056
+SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=1297, MFLOPS/s=3158.0570547417115, scale=8.54124903623747
+SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=1203, MFLOPS/s=3404.821280133001, scale=9.208645054031589
+SumVectorAvxPtrU16:     8.386202E+12    # msUsed=985, MFLOPS/s=4158.375634517766, scale=11.246700507614213
+SumVectorAvxPtrU16A:    8.3862026E+12   # msUsed=1390, MFLOPS/s=2946.7625899280574, scale=7.96978417266187
+SumVectorAvxPtrUX[4]:   2.1990233E+12   # msUsed=2454, MFLOPS/s=1669.1116544417278, scale=4.514262428687856
+SumVectorAvxPtrUX[8]:   4.3980465E+12   # msUsed=2343, MFLOPS/s=1748.1860862142553, scale=4.7281263337601365
+SumVectorAvxPtrUX[16]:  8.3862026E+12   # msUsed=2235, MFLOPS/s=1832.662192393736, scale=4.9565995525727065
 ```
 
 ### BenchmarkVectorCore30, Release, x64
@@ -392,23 +424,27 @@ Vector.IsHardwareAccelerated:   True
 Vector<byte>.Count:     32      # 256bit
 Vector<float>.Count:    8       # 256bit
 Vector<double>.Count:   4       # 256bit
-Vector4.Assembly:       System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 Vector4.Assembly.CodeBase:      file:///C:/Program Files (x86)/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
-Main-Vector4.Assembly.CodeBase: file:///C:/Program Files (x86)/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Numerics.Vectors.dll
+Vector<T>.Assembly.CodeBase:    file:///C:/Program Files (x86)/dotnet/shared/Microsoft.NETCore.App/3.1.26/System.Private.CoreLib.dll
 
 Benchmark:      count=4096, loops=1000000, countMFlops=4096
-SumBase:        6.871948E+10    # msUsed=4954, MFLOPS/s=826.806620912394
-SumBaseU4:      2.748779E+11    # msUsed=1906, MFLOPS/s=2149.00314795383, scale=2.5991605456453306
-SumVector4:     2.748779E+11    # msUsed=2781, MFLOPS/s=1472.851492268968, scale=1.7813736066163253
-SumVector4U4:   1.0995116E+12   # msUsed=828, MFLOPS/s=4946.859903381643, scale=5.983091787439614
-SumVectorT:     5.497558E+11    # msUsed=1563, MFLOPS/s=2620.601407549584, scale=3.1695457453614844
-SumVectorTU4:   2.1990233E+12   # msUsed=437, MFLOPS/s=9372.997711670481, scale=11.33638443935927
-SumVectorAvx:   5.497558E+11    # msUsed=1547, MFLOPS/s=2647.70523594053, scale=3.202327084680026
-SumVectorAvxSpan:       5.497558E+11    # msUsed=1578, MFLOPS/s=2595.6907477820027, scale=3.139416983523448
-SumVectorAvxPtr:        5.497558E+11    # msUsed=625, MFLOPS/s=6553.6, scale=7.926400000000001
-SumVectorAvxU4: 2.1990233E+12   # msUsed=437, MFLOPS/s=9372.997711670481, scale=11.33638443935927
-SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=469, MFLOPS/s=8733.475479744136, scale=10.562899786780385
-SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=172, MFLOPS/s=23813.95348837209, scale=28.802325581395348
+SumBase:        6.871948E+10    # msUsed=4906, MFLOPS/s=834.8960456583775
+SumBaseU4:      2.748779E+11    # msUsed=1875, MFLOPS/s=2184.5333333333333, scale=2.6165333333333334
+SumVector4:     2.748779E+11    # msUsed=2766, MFLOPS/s=1480.8387563268257, scale=1.7736804049168473
+SumVector4U4:   1.0995116E+12   # msUsed=812, MFLOPS/s=5044.334975369458, scale=6.041871921182266
+SumVectorT:     5.497558E+11    # msUsed=1547, MFLOPS/s=2647.70523594053, scale=3.171299288946348
+SumVectorTU4:   2.1990233E+12   # msUsed=438, MFLOPS/s=9351.598173515982, scale=11.200913242009133
+SumVectorAvx:   5.497558E+11    # msUsed=1562, MFLOPS/s=2622.2791293213827, scale=3.140845070422535
+SumVectorAvxSpan:       5.497558E+11    # msUsed=1547, MFLOPS/s=2647.70523594053, scale=3.171299288946348
+SumVectorAvxPtr:        5.497558E+11    # msUsed=610, MFLOPS/s=6714.754098360656, scale=8.042622950819672
+SumVectorAvxU4: 2.1990233E+12   # msUsed=437, MFLOPS/s=9372.997711670481, scale=11.22654462242563
+SumVectorAvxSpanU4:     2.1990233E+12   # msUsed=438, MFLOPS/s=9351.598173515982, scale=11.200913242009133
+SumVectorAvxPtrU4:      2.1990233E+12   # msUsed=171, MFLOPS/s=23953.216374269006, scale=28.690058479532166
+SumVectorAvxPtrU16:     8.386202E+12    # msUsed=235, MFLOPS/s=17429.787234042553, scale=20.876595744680852
+SumVectorAvxPtrU16A:    8.3862026E+12   # msUsed=454, MFLOPS/s=9022.02643171806, scale=10.806167400881057
+SumVectorAvxPtrUX[4]:   2.1990233E+12   # msUsed=922, MFLOPS/s=4442.516268980477, scale=5.321041214750543
+SumVectorAvxPtrUX[8]:   4.3980465E+12   # msUsed=969, MFLOPS/s=4227.038183694531, scale=5.062951496388029
+SumVectorAvxPtrUX[16]:  8.3862026E+12   # msUsed=859, MFLOPS/s=4768.335273573924, scale=5.71129220023283
 ```
 
 ### BenchmarkVectorCpp, x86
