@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1778
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VectorClassDemo", "VectorClassDemo\VectorClassDemo.shproj", "{CD8482F7-5878-49E8-9D36-4A6C67521F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorClassDemo20", "VectorClassDemo20\VectorClassDemo20.csproj", "{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		VectorClassDemo\VectorClassDemo.projitems*{cd8482f7-5878-49e8-9d36-4a6c67521f61}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26A9392D-B970-4ECB-A60F-CA277273A512}
+	EndGlobalSection
+EndGlobal
