@@ -64,8 +64,8 @@ namespace VectorClassDemo {
         /// <param name="tw">Output <see cref="TextWriter"/>.</param>
         /// <param name="indent">The indent.</param>
         public static void Run(TextWriter tw, string indent) {
-            RunType(tw, indent, CreateVectorUseRotate(float.MinValue, float.PositiveInfinity, float.NaN, -1f, 0f, 1f, 2f, 4f), new Vector<float>(2.0f));
-            RunType(tw, indent, CreateVectorUseRotate(double.MinValue, double.PositiveInfinity, -1, 0), new Vector<double>(2.0));
+            RunType(tw, indent, CreateVectorUseRotate(float.MinValue, float.PositiveInfinity, float.NaN, -1.2f, 0f, 1f, 2f, 4f), new Vector<float>(2.0f));
+            RunType(tw, indent, CreateVectorUseRotate(double.MinValue, double.PositiveInfinity, -1.2, 0), new Vector<double>(2.0));
             RunType(tw, indent, CreateVectorUseRotate<sbyte>(sbyte.MinValue, sbyte.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<sbyte>(2));
             RunType(tw, indent, CreateVectorUseRotate<short>(short.MinValue, short.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<short>(2));
             RunType(tw, indent, CreateVectorUseRotate<int>(int.MinValue, int.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<int>(2));
@@ -150,6 +150,11 @@ namespace VectorClassDemo {
 #if NET5_0_OR_GREATER
             //Ceiling(Vector<Double>) Returns a new vector whose elements are the smallest integral values that are greater than or equal to the given vector's elements.
             //Ceiling(Vector<Single>) Returns a new vector whose elements are the smallest integral values that are greater than or equal to the given vector's elements.
+            if (typeof(T) == typeof(Double)) {
+                tw.WriteLine(string.Format("Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorDouble(srcT))));
+            } else if (typeof(T) == typeof(Single)) {
+                tw.WriteLine(string.Format("Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorSingle(srcT))));
+            }
 #endif // NET5_0_OR_GREATER
 
             //ConditionalSelect(Vector<Int32>, Vector<Single>, Vector<Single>)    Creates a new single-precision vector with elements selected between two specified single-precision source vectors based on an integral mask vector.
@@ -189,6 +194,11 @@ namespace VectorClassDemo {
 #if NET5_0_OR_GREATER
             //Floor(Vector<Double>) Returns a new vector whose elements are the largest integral values that are less than or equal to the given vector's elements.
             //Floor(Vector<Single>)   Returns a new vector whose elements are the largest integral values that are less than or equal to the given vector's elements.
+            if (typeof(T) == typeof(Double)) {
+                tw.WriteLine(string.Format("Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorDouble(srcT))));
+            } else if (typeof(T) == typeof(Single)) {
+                tw.WriteLine(string.Format("Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorSingle(srcT))));
+            }
 #endif // NET5_0_OR_GREATER
 
             //GreaterThan(Vector<Double>, Vector<Double>) Returns a new integral vector whose elements signal whether the elements in one double-precision floating-point vector are greater than their corresponding elements in a second double-precision floating-point vector.
