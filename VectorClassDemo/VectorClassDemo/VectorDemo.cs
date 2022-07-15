@@ -67,13 +67,13 @@ namespace VectorClassDemo {
             RunType(tw, indent, CreateVectorUseRotate(float.MinValue, float.PositiveInfinity, float.NaN, -1.2f, 0f, 1f, 2f, 4f), new Vector<float>(2.0f));
             RunType(tw, indent, CreateVectorUseRotate(double.MinValue, double.PositiveInfinity, -1.2, 0), new Vector<double>(2.0));
             RunType(tw, indent, CreateVectorUseRotate<sbyte>(sbyte.MinValue, sbyte.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<sbyte>(2));
-            RunType(tw, indent, CreateVectorUseRotate<short>(short.MinValue, short.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<short>(2));
-            RunType(tw, indent, CreateVectorUseRotate<int>(int.MinValue, int.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<int>(2));
-            RunType(tw, indent, CreateVectorUseRotate<long>(long.MinValue, long.MaxValue, -1, 0, 1, 2, 3, 4), new Vector<long>(2));
+            RunType(tw, indent, CreateVectorUseRotate<short>(short.MinValue, short.MaxValue, -1, 0, 1, 2, 3, 4, 127, 128), new Vector<short>(2));
+            RunType(tw, indent, CreateVectorUseRotate<int>(int.MinValue, int.MaxValue, -1, 0, 1, 2, 3, 32768), new Vector<int>(2));
+            RunType(tw, indent, CreateVectorUseRotate<long>(long.MinValue, long.MaxValue, -1, 0, 1, 2, 3), new Vector<long>(2));
             RunType(tw, indent, CreateVectorUseRotate<byte>(byte.MinValue, byte.MaxValue, 0, 1, 2, 3, 4), new Vector<byte>(2));
-            RunType(tw, indent, CreateVectorUseRotate<ushort>(ushort.MinValue, ushort.MaxValue, 0, 1, 2, 3, 4), new Vector<ushort>(2));
-            RunType(tw, indent, CreateVectorUseRotate<uint>(uint.MinValue, uint.MaxValue, 0, 1, 2, 3, 4), new Vector<uint>(2));
-            RunType(tw, indent, CreateVectorUseRotate<ulong>(ulong.MinValue, ulong.MaxValue, 0, 1, 2, 3, 4), new Vector<ulong>(2));
+            RunType(tw, indent, CreateVectorUseRotate<ushort>(ushort.MinValue, ushort.MaxValue, 0, 1, 2, 3, 4, 255, 256), new Vector<ushort>(2));
+            RunType(tw, indent, CreateVectorUseRotate<uint>(uint.MinValue, uint.MaxValue, 0, 1, 2, 3, 65536), new Vector<uint>(2));
+            RunType(tw, indent, CreateVectorUseRotate<ulong>(ulong.MinValue, ulong.MaxValue, 0, 1, 2, 3), new Vector<ulong>(2));
         }
 
         /// <summary>
@@ -211,6 +211,7 @@ namespace VectorClassDemo {
             //AsVectorUInt16<T>(Vector<T>)    Reinterprets the bits of a specified vector into those of a vector of unsigned 16-bit integers.
             //AsVectorUInt32<T>(Vector<T>)    Reinterprets the bits of a specified vector into those of a vector of unsigned integers.
             //AsVectorUInt64<T>(Vector<T>) Reinterprets the bits of a specified vector into those of a vector of unsigned long integers.
+            // `As***` see below.
 
             //BitwiseAnd<T>(Vector<T>, Vector<T>) Returns a new vector by performing a bitwise Andoperation on each pair of elements in two vectors.
             WriteLineFormat(tw, indent, "BitwiseAnd(srcT, src1):\t{0}", Vector.BitwiseAnd(srcT, src1));
@@ -232,6 +233,24 @@ namespace VectorClassDemo {
             //ConditionalSelect(Vector<Int32>, Vector<Single>, Vector<Single>)    Creates a new single-precision vector with elements selected between two specified single-precision source vectors based on an integral mask vector.
             //ConditionalSelect(Vector<Int64>, Vector<Double>, Vector<Double>) Creates a new double-precision vector with elements selected between two specified double-precision source vectors based on an integral mask vector.
             //ConditionalSelect<T>(Vector<T>, Vector<T>, Vector<T>) Creates a new vector of a specified type with elements selected between two specified source vectors of the same type based on an integral mask vector.
+            Vector<T> mask = Vector.GreaterThan(srcT, src0);
+            WriteLineFormat(tw, indent, "# Max mask=GreaterThan(srcT, src0):\t{0}", mask);
+            WriteLineFormat(tw, indent, "ConditionalSelect(mask, srcT, src0):\t{0}", Vector.ConditionalSelect(mask, srcT, src0));
+            WriteLineFormat(tw, indent, "ConditionalSelect(srcT, src0, src1):\t{0}", Vector.ConditionalSelect(srcT, src0, src1));
+            // ConditionalSelect = left&mask | right&~mask;
+            //
+            // Sample UInt32:
+            //# srcT:   <0, 4294967295, 0, 1, 2, 3, 4, 0>       # (00000000 FFFFFFFF 00000000 00000001 00000002 00000003 00000004 00000000)
+            //# ConditionalSelect(srcT, src0, src1):    <1, 0, 1, 0, 1, 0, 1, 1>        # (00000001 00000000 00000001 00000000 00000001 00000000 00000001 00000001)
+            // Mean:
+            //[0] = src0[0]&srcT[0] | src0[1]&~srcT[0] = 0&0 | 1&~0 = 0 | 1&0xFFFFFFFF = 1
+            //[1] = src0[1]&srcT[1] | src0[1]&~srcT[1] = 0&4294967295 | 1&~4294967295 = 0 | 1&0 = 0
+            //[2] = src0[2]&srcT[2] | src0[2]&~srcT[2] = 0&0 | 1&~0 = 0 | 1&0xFFFFFFFF = 1
+            //[3] = src0[3]&srcT[3] | src0[3]&~srcT[3] = 0&1 | 1&~1 = 0 | 1&0xFFFFFFFE = 0
+            //[4] = src0[4]&srcT[4] | src0[4]&~srcT[4] = 0&2 | 1&~2 = 0 | 1&0xFFFFFFFD = 1
+            //[5] = src0[5]&srcT[5] | src0[5]&~srcT[5] = 0&3 | 1&~3 = 0 | 1&0xFFFFFFFC = 0
+            //[6] = src0[6]&srcT[6] | src0[6]&~srcT[6] = 0&4 | 1&~4 = 0 | 1&0xFFFFFFFB = 1
+            //[7] = src0[7]&srcT[7] | src0[7]&~srcT[7] = 0&0 | 1&~0 = 0 | 1 = 1
 
             //ConvertToDouble(Vector<Int64>) Converts a Vector<Int64>to aVector<Double>.
             //ConvertToDouble(Vector<UInt64>) Converts a Vector<UInt64> to aVector<Double>.
@@ -241,6 +260,22 @@ namespace VectorClassDemo {
             //ConvertToSingle(Vector<UInt32>) Converts a Vector<UInt32> to aVector<Single>.
             //ConvertToUInt32(Vector<Single>) Converts a Vector<Single> to aVector<UInt32>.
             //ConvertToUInt64(Vector<Double>) Converts a Vector<Double> to aVector<UInt64>.
+            // Infinity or NaN -> IntTypes.MinValue .
+            if (typeof(T) == typeof(Double)) {
+                WriteLineFormat(tw, indent, "ConvertToInt64(srcT):\t{0}", Vector.ConvertToInt64(Vector.AsVectorDouble(srcT)));
+                WriteLineFormat(tw, indent, "ConvertToUInt64(srcT):\t{0}", Vector.ConvertToUInt64(Vector.AsVectorDouble(srcT)));
+            } else if (typeof(T) == typeof(Single)) {
+                WriteLineFormat(tw, indent, "ConvertToInt32(srcT):\t{0}", Vector.ConvertToInt32(Vector.AsVectorSingle(srcT)));
+                WriteLineFormat(tw, indent, "ConvertToUInt32(srcT):\t{0}", Vector.ConvertToUInt32(Vector.AsVectorSingle(srcT)));
+            } else if (typeof(T) == typeof(Int32)) {
+                WriteLineFormat(tw, indent, "ConvertToSingle(srcT):\t{0}", Vector.ConvertToSingle(Vector.AsVectorInt32(srcT)));
+            } else if (typeof(T) == typeof(UInt32)) {
+                WriteLineFormat(tw, indent, "ConvertToSingle(srcT):\t{0}", Vector.ConvertToSingle(Vector.AsVectorUInt32(srcT)));
+            } else if (typeof(T) == typeof(Int64)) {
+                WriteLineFormat(tw, indent, "ConvertToDouble(srcT):\t{0}", Vector.ConvertToDouble(Vector.AsVectorInt64(srcT)));
+            } else if (typeof(T) == typeof(UInt64)) {
+                WriteLineFormat(tw, indent, "ConvertToDouble(srcT):\t{0}", Vector.ConvertToDouble(Vector.AsVectorUInt64(srcT)));
+            }
 
             //Divide<T>(Vector<T>, Vector<T>) Returns a new vector whose values are the result of dividing the first vector's elements by the corresponding elements in the second vector.
             WriteLineFormat(tw, indent, "Divide(srcT, src2):\t{0}", Vector.Divide(srcT, src2));
@@ -336,6 +371,21 @@ namespace VectorClassDemo {
             //Narrow(Vector<UInt16>, Vector<UInt16>) Narrows two Vector<UInt16> instances into one Vector<Byte>.
             //Narrow(Vector<UInt32>, Vector<UInt32>) Narrows two Vector<UInt32> instances into one Vector<UInt16>.
             //Narrow(Vector<UInt64>, Vector<UInt64>) Narrows two Vector<UInt64> instances into one Vector<UInt32>.
+            if (typeof(T) == typeof(Double)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorDouble(srcT), Vector.AsVectorDouble(src1)));
+            } else if (typeof(T) == typeof(Int16)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorInt16(srcT), Vector.AsVectorInt16(src1)));
+            } else if (typeof(T) == typeof(Int32)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorInt32(srcT), Vector.AsVectorInt32(src1)));
+            } else if (typeof(T) == typeof(Int64)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorInt64(srcT), Vector.AsVectorInt64(src1)));
+            } else if (typeof(T) == typeof(UInt16)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorUInt16(srcT), Vector.AsVectorUInt16(src1)));
+            } else if (typeof(T) == typeof(UInt32)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorUInt32(srcT), Vector.AsVectorUInt32(src1)));
+            } else if (typeof(T) == typeof(UInt64)) {
+                WriteLineFormat(tw, indent, "Narrow(srcT):\t{0}", Vector.Narrow(Vector.AsVectorUInt64(srcT), Vector.AsVectorUInt64(src1)));
+            }
 
             //Negate<T>(Vector<T>) Returns a new vector whose elements are the negation of the corresponding element in the specified vector.
             WriteLineFormat(tw, indent, "Negate(srcT):\t{0}", Vector.Negate(srcT));
@@ -381,6 +431,8 @@ namespace VectorClassDemo {
 
 #if NET6_0_OR_GREATER
             //Sum<T>(Vector<T>) Returns the sum of all the elements inside the specified vector.
+            WriteLineFormat(tw, indent, "Sum(srcT):\t{0}", Vector.Sum(srcT));
+            WriteLineFormat(tw, indent, "Sum(src1):\t{0}", Vector.Sum(src1));
 #endif // NET6_0_OR_GREATER
 
             //Widen(Vector<Byte>, Vector<UInt16>, Vector<UInt16>) Widens aVector<Byte> into two Vector<UInt16>instances.
@@ -390,6 +442,42 @@ namespace VectorClassDemo {
             //Widen(Vector<Single>, Vector<Double>, Vector<Double>) Widens a Vector<Single> into twoVector<Double> instances.
             //Widen(Vector<UInt16>, Vector<UInt32>, Vector<UInt32>) Widens a Vector<UInt16> into twoVector<UInt32> instances.
             //Widen(Vector<UInt32>, Vector<UInt64>, Vector<UInt64>) Widens a Vector<UInt32> into twoVector<UInt64> instances.
+            if (typeof(T) == typeof(Single)) {
+                Vector<Double> low, high;
+                Vector.Widen(Vector.AsVectorSingle(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(SByte)) {
+                Vector<Int16> low, high;
+                Vector.Widen(Vector.AsVectorSByte(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(Int16)) {
+                Vector<Int32> low, high;
+                Vector.Widen(Vector.AsVectorInt16(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(Int32)) {
+                Vector<Int64> low, high;
+                Vector.Widen(Vector.AsVectorInt32(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(Byte)) {
+                Vector<UInt16> low, high;
+                Vector.Widen(Vector.AsVectorByte(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(UInt16)) {
+                Vector<UInt32> low, high;
+                Vector.Widen(Vector.AsVectorUInt16(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            } else if (typeof(T) == typeof(UInt32)) {
+                Vector<UInt64> low, high;
+                Vector.Widen(Vector.AsVectorUInt32(srcT), out low, out high);
+                WriteLineFormat(tw, indent, "Widen(srcT).low:\t{0}", low);
+                WriteLineFormat(tw, indent, "Widen(srcT).high:\t{0}", high);
+            }
 
             //Xor<T>(Vector<T>, Vector<T>) Returns a new vector by performing a bitwise exclusive Or(XOr) operation on each pair of elements in two vectors.
             WriteLineFormat(tw, indent, "Xor(srcT, src1):\t{0}", Vector.Xor(srcT, src1));
