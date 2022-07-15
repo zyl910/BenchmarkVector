@@ -96,6 +96,78 @@ namespace VectorClassDemo {
         }
 
         /// <summary>
+        /// Get hex string.
+        /// </summary>
+        /// <typeparam name="T">Vector value type.</typeparam>
+        /// <param name="src">Source value.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="noFixEndian">No fix endian.</param>
+        /// <returns>Returns hex string.</returns>
+        private static string GetHex<T>(Vector<T> src, string separator, bool noFixEndian) where T : struct {
+            Vector<byte> list = Vector.AsVectorByte(src);
+            int unitCount = Vector<T>.Count;
+            int unitSize = Vector<byte>.Count / unitCount;
+            bool fixEndian = false;
+            if (!noFixEndian && BitConverter.IsLittleEndian) fixEndian = true;
+            StringBuilder sb = new StringBuilder();
+            if (fixEndian) {
+                // IsLittleEndian.
+                for (int i=0; i < unitCount; ++i) {
+                    if ((i > 0)) {
+                        if (!string.IsNullOrEmpty(separator)) {
+                            sb.Append(separator);
+                        }
+                    }
+                    int idx = unitSize * (i+1) - 1;
+                    for(int j = 0; j < unitSize; ++j) {
+                        byte by = list[idx];
+                        --idx;
+                        sb.Append(by.ToString("X2"));
+                    }
+                }
+            } else {
+                for (int i = 0; i < Vector<byte>.Count; ++i) {
+                    byte by = list[i];
+                    if ((i > 0) && (0 == i % unitSize)) {
+                        if (!string.IsNullOrEmpty(separator)) {
+                            sb.Append(separator);
+                        }
+                    }
+                    sb.Append(by.ToString("X2"));
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// WriteLine wuth format.
+        /// </summary>
+        /// <typeparam name="T">Vector value type.</typeparam>
+        /// <param name="tw">The TextWriter.</param>
+        /// <param name="indent">The indent.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="src">Source value</param>
+        private static void WriteLineFormat<T>(TextWriter tw, string indent, string format, Vector<T> src) where T : struct {
+            if (null == tw) return;
+            string line = indent + string.Format(format, src);
+            string hex = GetHex(src, " ", false);
+            line += "\t# (" + hex +")";
+            tw.WriteLine(line);
+        }
+
+        /// <summary>
+        /// WriteLine wuth format.
+        /// </summary>
+        /// <param name="tw">The TextWriter.</param>
+        /// <param name="indent">The indent.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="src">Source value</param>
+        private static void WriteLineFormat(TextWriter tw, string indent, string format, object src) {
+            if (null == tw) return;
+            tw.WriteLine(indent + string.Format(format, src));
+        }
+
+        /// <summary>
         /// Run type demo.
         /// </summary>
         /// <typeparam name="T">Vector type.</typeparam>
@@ -107,24 +179,24 @@ namespace VectorClassDemo {
             Vector<T> src0 = Vector<T>.Zero;
             Vector<T> src1 = Vector<T>.One;
             Vector<T> srcAllOnes = ~Vector<T>.Zero;
-            tw.WriteLine(string.Format("-- {0}, Vector<{0}>.Count={1} --", typeof(T).Name, Vector<T>.Count));
-            tw.WriteLine(string.Format("srcT:\t{0}", srcT));
-            //tw.WriteLine(string.Format("src2:\t{0}", src2));
-            tw.WriteLine(string.Format("srcAllOnes:\t{0}", srcAllOnes));
+            tw.WriteLine(indent + string.Format("-- {0}, Vector<{0}>.Count={1} --", typeof(T).Name, Vector<T>.Count));
+            WriteLineFormat(tw, indent, "srcT:\t{0}", srcT);
+            //WriteLineFormat(tw, indent, "src2:\t{0}", src2);
+            WriteLineFormat(tw, indent, "srcAllOnes:\t{0}", srcAllOnes);
 
             // -- Methods --
             #region Methods
             //Abs<T>(Vector<T>) Returns a new vector whose elements are the absolute values of the given vector's elements.
-            tw.WriteLine(string.Format("Abs(srcT):\t{0}", Vector.Abs(srcT)));
-            tw.WriteLine(string.Format("Abs(srcAllOnes):\t{0}", Vector.Abs(srcAllOnes)));
+            WriteLineFormat(tw, indent, "Abs(srcT):\t{0}", Vector.Abs(srcT));
+            WriteLineFormat(tw, indent, "Abs(srcAllOnes):\t{0}", Vector.Abs(srcAllOnes));
 
             //Add<T>(Vector<T>, Vector<T>) Returns a new vector whose values are the sum of each pair of elements from two given vectors.
-            tw.WriteLine(string.Format("Add(srcT, src1):\t{0}", Vector.Add(srcT, src1)));
-            tw.WriteLine(string.Format("Add(srcT, src2):\t{0}", Vector.Add(srcT, src2)));
+            WriteLineFormat(tw, indent, "Add(srcT, src1):\t{0}", Vector.Add(srcT, src1));
+            WriteLineFormat(tw, indent, "Add(srcT, src2):\t{0}", Vector.Add(srcT, src2));
 
             //AndNot<T>(Vector<T>, Vector<T>) Returns a new vector by performing a bitwise And Not operation on each pair of corresponding elements in two vectors.
-            tw.WriteLine(string.Format("AndNot(srcT, src1):\t{0}", Vector.AndNot(srcT, src1)));
-            tw.WriteLine(string.Format("AndNot(srcT, src2):\t{0}", Vector.AndNot(srcT, src2)));
+            WriteLineFormat(tw, indent, "AndNot(srcT, src1):\t{0}", Vector.AndNot(srcT, src1));
+            WriteLineFormat(tw, indent, "AndNot(srcT, src2):\t{0}", Vector.AndNot(srcT, src2));
 
             //As<TFrom, TTo>(Vector<TFrom>)    Reinterprets aVector64<T> as a new Vector64<T>.
             //AsVectorByte<T>(Vector<T>) Reinterprets the bits of a specified vector into those of a vector of unsigned bytes.
@@ -141,19 +213,19 @@ namespace VectorClassDemo {
             //AsVectorUInt64<T>(Vector<T>) Reinterprets the bits of a specified vector into those of a vector of unsigned long integers.
 
             //BitwiseAnd<T>(Vector<T>, Vector<T>) Returns a new vector by performing a bitwise Andoperation on each pair of elements in two vectors.
-            tw.WriteLine(string.Format("BitwiseAnd(srcT, src1):\t{0}", Vector.BitwiseAnd(srcT, src1)));
-            tw.WriteLine(string.Format("BitwiseAnd(srcT, src2):\t{0}", Vector.BitwiseAnd(srcT, src2)));
+            WriteLineFormat(tw, indent, "BitwiseAnd(srcT, src1):\t{0}", Vector.BitwiseAnd(srcT, src1));
+            WriteLineFormat(tw, indent, "BitwiseAnd(srcT, src2):\t{0}", Vector.BitwiseAnd(srcT, src2));
             //BitwiseOr<T>(Vector<T>, Vector<T>)  Returns a new vector by performing a bitwise Oroperation on each pair of elements in two vectors.
-            tw.WriteLine(string.Format("BitwiseOr(srcT, src1):\t{0}", Vector.BitwiseOr(srcT, src1)));
-            tw.WriteLine(string.Format("BitwiseOr(srcT, src2):\t{0}", Vector.BitwiseOr(srcT, src2)));
+            WriteLineFormat(tw, indent, "BitwiseOr(srcT, src1):\t{0}", Vector.BitwiseOr(srcT, src1));
+            WriteLineFormat(tw, indent, "BitwiseOr(srcT, src2):\t{0}", Vector.BitwiseOr(srcT, src2));
 
 #if NET5_0_OR_GREATER
             //Ceiling(Vector<Double>) Returns a new vector whose elements are the smallest integral values that are greater than or equal to the given vector's elements.
             //Ceiling(Vector<Single>) Returns a new vector whose elements are the smallest integral values that are greater than or equal to the given vector's elements.
             if (typeof(T) == typeof(Double)) {
-                tw.WriteLine(string.Format("Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorDouble(srcT))));
+                WriteLineFormat(tw, indent, "Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorDouble(srcT)));
             } else if (typeof(T) == typeof(Single)) {
-                tw.WriteLine(string.Format("Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorSingle(srcT))));
+                WriteLineFormat(tw, indent, "Ceiling(srcT):\t{0}", Vector.Ceiling(Vector.AsVectorSingle(srcT)));
             }
 #endif // NET5_0_OR_GREATER
 
@@ -171,33 +243,33 @@ namespace VectorClassDemo {
             //ConvertToUInt64(Vector<Double>) Converts a Vector<Double> to aVector<UInt64>.
 
             //Divide<T>(Vector<T>, Vector<T>) Returns a new vector whose values are the result of dividing the first vector's elements by the corresponding elements in the second vector.
-            tw.WriteLine(string.Format("Divide(srcT, src2):\t{0}", Vector.Divide(srcT, src2)));
+            WriteLineFormat(tw, indent, "Divide(srcT, src2):\t{0}", Vector.Divide(srcT, src2));
 
             //Dot<T>(Vector<T>, Vector<T>) Returns the dot product of two vectors.
-            tw.WriteLine(string.Format("Dot(srcT, src1):\t{0}", Vector.Dot(srcT, src1)));
-            tw.WriteLine(string.Format("Dot(srcT, src2):\t{0}", Vector.Dot(srcT, src2)));
-            tw.WriteLine(string.Format("Dot(src1, src2):\t{0}", Vector.Dot(src1, src2)));
+            WriteLineFormat(tw, indent, "Dot(srcT, src1):\t{0}", Vector.Dot(srcT, src1));
+            WriteLineFormat(tw, indent, "Dot(srcT, src2):\t{0}", Vector.Dot(srcT, src2));
+            WriteLineFormat(tw, indent, "Dot(src1, src2):\t{0}", Vector.Dot(src1, src2));
 
             //Equals(Vector<Double>, Vector<Double>)  Returns a new integral vector whose elements signal whether the elements in two specified double-precision vectors are equal.
             //Equals(Vector<Int32>, Vector<Int32>)    Returns a new integral vector whose elements signal whether the elements in two specified integral vectors are equal.
             //Equals(Vector<Int64>, Vector<Int64>)    Returns a new vector whose elements signal whether the elements in two specified long integer vectors are equal.
             //Equals(Vector<Single>, Vector<Single>) Returns a new integral vector whose elements signal whether the elements in two specified single-precision vectors are equal.
             //Equals<T>(Vector<T>, Vector<T>) Returns a new vector of a specified type whose elements signal whether the elements in two specified vectors of the same type are equal.
-            tw.WriteLine(string.Format("Equals(srcT, src0):\t{0}", Vector.Equals(srcT, src0)));
-            tw.WriteLine(string.Format("Equals(srcT, src1):\t{0}", Vector.Equals(srcT, src1)));
+            WriteLineFormat(tw, indent, "Equals(srcT, src0):\t{0}", Vector.Equals(srcT, src0));
+            WriteLineFormat(tw, indent, "Equals(srcT, src1):\t{0}", Vector.Equals(srcT, src1));
 
             //EqualsAll<T>(Vector<T>, Vector<T>) Returns a value that indicates whether each pair of elements in the given vectors is equal.
-            tw.WriteLine(string.Format("EqualsAll(srcT, src0):\t{0}", Vector.EqualsAll(srcT, src0)));
+            WriteLineFormat(tw, indent, "EqualsAll(srcT, src0):\t{0}", Vector.EqualsAll(srcT, src0));
             //EqualsAny<T>(Vector<T>, Vector<T>) Returns a value that indicates whether any single pair of elements in the given vectors is equal.
-            tw.WriteLine(string.Format("EqualsAny(srcT, src0):\t{0}", Vector.EqualsAny(srcT, src0)));
+            WriteLineFormat(tw, indent, "EqualsAny(srcT, src0):\t{0}", Vector.EqualsAny(srcT, src0));
 
 #if NET5_0_OR_GREATER
             //Floor(Vector<Double>) Returns a new vector whose elements are the largest integral values that are less than or equal to the given vector's elements.
             //Floor(Vector<Single>)   Returns a new vector whose elements are the largest integral values that are less than or equal to the given vector's elements.
             if (typeof(T) == typeof(Double)) {
-                tw.WriteLine(string.Format("Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorDouble(srcT))));
+                WriteLineFormat(tw, indent, "Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorDouble(srcT)));
             } else if (typeof(T) == typeof(Single)) {
-                tw.WriteLine(string.Format("Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorSingle(srcT))));
+                WriteLineFormat(tw, indent, "Floor(srcT):\t{0}", Vector.Floor(Vector.AsVectorSingle(srcT)));
             }
 #endif // NET5_0_OR_GREATER
 
@@ -206,8 +278,8 @@ namespace VectorClassDemo {
             //GreaterThan(Vector<Int64>, Vector<Int64>)   Returns a new long integer vector whose elements signal whether the elements in one long integer vector are greater than their corresponding elements in a second long integer vector.
             //GreaterThan(Vector<Single>, Vector<Single>) Returns a new integral vector whose elements signal whether the elements in one single-precision floating-point vector are greater than their corresponding elements in a second single-precision floating-point vector.
             //GreaterThan<T>(Vector<T>, Vector<T>)    Returns a new vector whose elements signal whether the elements in one vector of a specified type are greater than their corresponding elements in the second vector of the same time.
-            tw.WriteLine(string.Format("GreaterThan(srcT, src0):\t{0}", Vector.GreaterThan(srcT, src0)));
-            tw.WriteLine(string.Format("GreaterThan(srcT, src1):\t{0}", Vector.GreaterThan(srcT, src1)));
+            WriteLineFormat(tw, indent, "GreaterThan(srcT, src0):\t{0}", Vector.GreaterThan(srcT, src0));
+            WriteLineFormat(tw, indent, "GreaterThan(srcT, src1):\t{0}", Vector.GreaterThan(srcT, src1));
 
             //GreaterThanAll<T>(Vector<T>, Vector<T>) Returns a value that indicates whether all elements in the first vector are greater than the corresponding elements in the second vector.
             //GreaterThanAny<T>(Vector<T>, Vector<T>) Returns a value that indicates whether any element in the first vector is greater than the corresponding element in the second vector.
@@ -217,8 +289,8 @@ namespace VectorClassDemo {
             //GreaterThanOrEqual(Vector<Int64>, Vector<Int64>)    Returns a new long integer vector whose elements signal whether the elements in one long integer vector are greater than or equal to their corresponding elements in the second long integer vector.
             //GreaterThanOrEqual(Vector<Single>, Vector<Single>) Returns a new integral vector whose elements signal whether the elements in one vector are greater than or equal to their corresponding elements in the single-precision floating-point second vector.
             //GreaterThanOrEqual<T>(Vector<T>, Vector<T>) Returns a new vector whose elements signal whether the elements in one vector of a specified type are greater than or equal to their corresponding elements in the second vector of the same type.
-            tw.WriteLine(string.Format("GreaterThanOrEqual(srcT, src0):\t{0}", Vector.GreaterThanOrEqual(srcT, src0)));
-            tw.WriteLine(string.Format("GreaterThanOrEqual(srcT, src1):\t{0}", Vector.GreaterThanOrEqual(srcT, src1)));
+            WriteLineFormat(tw, indent, "GreaterThanOrEqual(srcT, src0):\t{0}", Vector.GreaterThanOrEqual(srcT, src0));
+            WriteLineFormat(tw, indent, "GreaterThanOrEqual(srcT, src1):\t{0}", Vector.GreaterThanOrEqual(srcT, src1));
 
             //GreaterThanOrEqualAll<T>(Vector<T>, Vector<T>) Returns a value that indicates whether all elements in the first vector are greater than or equal to all the corresponding elements in the second vector.
             //GreaterThanOrEqualAny<T>(Vector<T>, Vector<T>) Returns a value that indicates whether any element in the first vector is greater than or equal to the corresponding element in the second vector.
@@ -228,8 +300,8 @@ namespace VectorClassDemo {
             //LessThan(Vector<Int64>, Vector<Int64>)  Returns a new long integer vector whose elements signal whether the elements in one long integer vector are less than their corresponding elements in a second long integer vector.
             //LessThan(Vector<Single>, Vector<Single>) Returns a new integral vector whose elements signal whether the elements in one single-precision vector are less than their corresponding elements in a second single-precision vector.
             //LessThan<T>(Vector<T>, Vector<T>)   Returns a new vector of a specified type whose elements signal whether the elements in one vector are less than their corresponding elements in the second vector.
-            tw.WriteLine(string.Format("LessThan(srcT, src0):\t{0}", Vector.LessThan(srcT, src0)));
-            tw.WriteLine(string.Format("LessThan(srcT, src1):\t{0}", Vector.LessThan(srcT, src1)));
+            WriteLineFormat(tw, indent, "LessThan(srcT, src0):\t{0}", Vector.LessThan(srcT, src0));
+            WriteLineFormat(tw, indent, "LessThan(srcT, src1):\t{0}", Vector.LessThan(srcT, src1));
 
             //LessThanAll<T>(Vector<T>, Vector<T>) Returns a value that indicates whether all of the elements in the first vector are less than their corresponding elements in the second vector.
             //LessThanAny<T>(Vector<T>, Vector<T>) Returns a value that indicates whether any element in the first vector is less than the corresponding element in the second vector.
@@ -239,23 +311,23 @@ namespace VectorClassDemo {
             //LessThanOrEqual(Vector<Int64>, Vector<Int64>)   Returns a new long integer vector whose elements signal whether the elements in one long integer vector are less or equal to their corresponding elements in a second long integer vector.
             //LessThanOrEqual(Vector<Single>, Vector<Single>) Returns a new integral vector whose elements signal whether the elements in one single-precision floating-point vector are less than or equal to their corresponding elements in a second single-precision floating-point vector.
             //LessThanOrEqual<T>(Vector<T>, Vector<T>)    Returns a new vector whose elements signal whether the elements in one vector are less than or equal to their corresponding elements in the second vector.
-            tw.WriteLine(string.Format("LessThanOrEqual(srcT, src0):\t{0}", Vector.LessThanOrEqual(srcT, src0)));
-            tw.WriteLine(string.Format("LessThanOrEqual(srcT, src1):\t{0}", Vector.LessThanOrEqual(srcT, src1)));
+            WriteLineFormat(tw, indent, "LessThanOrEqual(srcT, src0):\t{0}", Vector.LessThanOrEqual(srcT, src0));
+            WriteLineFormat(tw, indent, "LessThanOrEqual(srcT, src1):\t{0}", Vector.LessThanOrEqual(srcT, src1));
 
             //LessThanOrEqualAll<T>(Vector<T>, Vector<T>) Returns a value that indicates whether all elements in the first vector are less than or equal to their corresponding elements in the second vector.
             //LessThanOrEqualAny<T>(Vector<T>, Vector<T>) Returns a value that indicates whether any element in the first vector is less than or equal to the corresponding element in the second vector.
 
             //Max<T>(Vector<T>, Vector<T>) Returns a new vector whose elements are the maximum of each pair of elements in the two given vectors.
-            tw.WriteLine(string.Format("Max(srcT, src0):\t{0}", Vector.Max(srcT, src0)));
-            tw.WriteLine(string.Format("Max(srcT, src2):\t{0}", Vector.Max(srcT, src2)));
+            WriteLineFormat(tw, indent, "Max(srcT, src0):\t{0}", Vector.Max(srcT, src0));
+            WriteLineFormat(tw, indent, "Max(srcT, src2):\t{0}", Vector.Max(srcT, src2));
             //Min<T>(Vector<T>, Vector<T>)    Returns a new vector whose elements are the minimum of each pair of elements in the two given vectors.
-            tw.WriteLine(string.Format("Min(srcT, src0):\t{0}", Vector.Min(srcT, src0)));
-            tw.WriteLine(string.Format("Min(srcT, src2):\t{0}", Vector.Min(srcT, src2)));
+            WriteLineFormat(tw, indent, "Min(srcT, src0):\t{0}", Vector.Min(srcT, src0));
+            WriteLineFormat(tw, indent, "Min(srcT, src2):\t{0}", Vector.Min(srcT, src2));
 
             //Multiply<T>(T, Vector<T>)   Returns a new vector whose values are a scalar value multiplied by each of the values of a specified vector.
             //Multiply<T>(Vector<T>, T) Returns a new vector whose values are the values of a specified vector each multiplied by a scalar value.
             //Multiply<T>(Vector<T>, Vector<T>)   Returns a new vector whose values are the product of each pair of elements in two specified vectors.
-            tw.WriteLine(string.Format("Multiply(srcT, src2):\t{0}", Vector.Multiply(srcT, src2)));
+            WriteLineFormat(tw, indent, "Multiply(srcT, src2):\t{0}", Vector.Multiply(srcT, src2));
 
             //Narrow(Vector<Double>, Vector<Double>) Narrows two Vector<Double>instances into one Vector<Single>.
             //Narrow(Vector<Int16>, Vector<Int16>) Narrows two Vector<Int16> instances into one Vector<SByte>.
@@ -266,11 +338,11 @@ namespace VectorClassDemo {
             //Narrow(Vector<UInt64>, Vector<UInt64>) Narrows two Vector<UInt64> instances into one Vector<UInt32>.
 
             //Negate<T>(Vector<T>) Returns a new vector whose elements are the negation of the corresponding element in the specified vector.
-            tw.WriteLine(string.Format("Negate(srcT):\t{0}", Vector.Negate(srcT)));
-            tw.WriteLine(string.Format("Negate(srcAllOnes):\t{0}", Vector.Negate(srcAllOnes)));
+            WriteLineFormat(tw, indent, "Negate(srcT):\t{0}", Vector.Negate(srcT));
+            WriteLineFormat(tw, indent, "Negate(srcAllOnes):\t{0}", Vector.Negate(srcAllOnes));
             //OnesComplement<T>(Vector<T>) Returns a new vector whose elements are obtained by taking the one's complement of a specified vector's elements.
-            tw.WriteLine(string.Format("OnesComplement(srcT):\t{0}", Vector.OnesComplement(srcT)));
-            tw.WriteLine(string.Format("OnesComplement(srcAllOnes):\t{0}", Vector.OnesComplement(srcAllOnes)));
+            WriteLineFormat(tw, indent, "OnesComplement(srcT):\t{0}", Vector.OnesComplement(srcT));
+            WriteLineFormat(tw, indent, "OnesComplement(srcAllOnes):\t{0}", Vector.OnesComplement(srcAllOnes));
 
 #if NET7_0_OR_GREATER
             //ShiftLeft(Vector<Byte>, Int32)  Shifts each element of a vector left by the specified amount.
@@ -301,11 +373,11 @@ namespace VectorClassDemo {
 #endif // NET7_0_OR_GREATER
 
             //SquareRoot<T>(Vector<T>)    Returns a new vector whose elements are the square roots of a specified vector's elements.
-            tw.WriteLine(string.Format("SquareRoot(srcT):\t{0}", Vector.SquareRoot(srcT)));
+            WriteLineFormat(tw, indent, "SquareRoot(srcT):\t{0}", Vector.SquareRoot(srcT));
 
             //Subtract<T>(Vector<T>, Vector<T>) Returns a new vector whose values are the difference between the elements in the second vector and their corresponding elements in the first vector.
-            tw.WriteLine(string.Format("Subtract(srcT, src1):\t{0}", Vector.Subtract(srcT, src1)));
-            tw.WriteLine(string.Format("Subtract(srcT, src2):\t{0}", Vector.Subtract(srcT, src2)));
+            WriteLineFormat(tw, indent, "Subtract(srcT, src1):\t{0}", Vector.Subtract(srcT, src1));
+            WriteLineFormat(tw, indent, "Subtract(srcT, src2):\t{0}", Vector.Subtract(srcT, src2));
 
 #if NET6_0_OR_GREATER
             //Sum<T>(Vector<T>) Returns the sum of all the elements inside the specified vector.
@@ -320,15 +392,14 @@ namespace VectorClassDemo {
             //Widen(Vector<UInt32>, Vector<UInt64>, Vector<UInt64>) Widens a Vector<UInt32> into twoVector<UInt64> instances.
 
             //Xor<T>(Vector<T>, Vector<T>) Returns a new vector by performing a bitwise exclusive Or(XOr) operation on each pair of elements in two vectors.
-            tw.WriteLine(string.Format("Xor(srcT, src1):\t{0}", Vector.Xor(srcT, src1)));
-            tw.WriteLine(string.Format("Xor(srcT, src2):\t{0}", Vector.Xor(srcT, src2)));
+            WriteLineFormat(tw, indent, "Xor(srcT, src1):\t{0}", Vector.Xor(srcT, src1));
+            WriteLineFormat(tw, indent, "Xor(srcT, src2):\t{0}", Vector.Xor(srcT, src2));
 
             #endregion // Methods
 
             // done.
             tw.WriteLine();
         }
-
     }
 }
 
