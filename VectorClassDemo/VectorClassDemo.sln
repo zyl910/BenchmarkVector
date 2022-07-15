@@ -1,15 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1778
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "VectorClassDemo", "VectorClassDemo\VectorClassDemo.shproj", "{CD8482F7-5878-49E8-9D36-4A6C67521F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorClassDemo20", "VectorClassDemo20\VectorClassDemo20.csproj", "{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VectorClassDemo20", "VectorClassDemo20\VectorClassDemo20.csproj", "{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorClassDemo50", "VectorClassDemo50\VectorClassDemo50.csproj", "{DB4D7CB6-7E22-4FBB-9C37-92611F04B56D}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		VectorClassDemo\VectorClassDemo.projitems*{3f30f0bd-79b1-435c-b00e-c8978fbe2a4c}*SharedItemsImports = 5
 		VectorClassDemo\VectorClassDemo.projitems*{cd8482f7-5878-49e8-9d36-4a6c67521f61}*SharedItemsImports = 13
+		VectorClassDemo\VectorClassDemo.projitems*{db4d7cb6-7e22-4fbb-9c37-92611f04b56d}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,10 @@ Global
 		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F30F0BD-79B1-435C-B00E-C8978FBE2A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4D7CB6-7E22-4FBB-9C37-92611F04B56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4D7CB6-7E22-4FBB-9C37-92611F04B56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4D7CB6-7E22-4FBB-9C37-92611F04B56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4D7CB6-7E22-4FBB-9C37-92611F04B56D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
