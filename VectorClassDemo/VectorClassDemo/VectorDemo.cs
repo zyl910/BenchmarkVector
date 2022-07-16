@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable SYSLIB0012
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
