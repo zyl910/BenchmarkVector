@@ -358,6 +358,7 @@ namespace VectorClassDemo {
             //Min<T>(Vector<T>, Vector<T>)    Returns a new vector whose elements are the minimum of each pair of elements in the two given vectors.
             WriteLineFormat(tw, indent, "Min(srcT, src0):\t{0}", Vector.Min(srcT, src0));
             WriteLineFormat(tw, indent, "Min(srcT, src2):\t{0}", Vector.Min(srcT, src2));
+            WriteLineFormat(tw, indent, "Min(Max(srcT, src0), src2):\t{0}", Vector.Min(Vector.Max(srcT, src0), src2));
 
             //Multiply<T>(T, Vector<T>)   Returns a new vector whose values are a scalar value multiplied by each of the values of a specified vector.
             //Multiply<T>(Vector<T>, T) Returns a new vector whose values are the values of a specified vector each multiplied by a scalar value.
