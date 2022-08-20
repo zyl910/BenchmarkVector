@@ -4,12 +4,6 @@ using System.IO;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
-using System.Runtime.InteropServices;
-#if Allow_Intrinsics
-using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
-#endif
-using System.Runtime.CompilerServices;
 
 namespace BenchmarkVector {
     /// <summary>
@@ -113,7 +107,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumBase(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -130,7 +124,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVector4(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -152,6 +146,7 @@ namespace BenchmarkVector {
             for (int j = 0; j < loops; ++j) {
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
+                    // Equivalent to scalar model: rt += src[i];
                     vrt += vsrc[i]; // Add.
                 }
                 // Remainder processs.
@@ -161,7 +156,7 @@ namespace BenchmarkVector {
                 }
             }
             // Reduce.
-            rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
+            rt += vrt.X + vrt.Y + vrt.Z + vrt.W;
             return rt;
         }
 
@@ -170,7 +165,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorT(float[] src, int count, int loops) {
             float rt = 0; // Result.

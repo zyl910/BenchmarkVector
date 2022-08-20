@@ -226,7 +226,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumBase(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -243,7 +243,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumBaseU4(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -281,7 +281,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVector4(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -303,6 +303,7 @@ namespace BenchmarkVector {
             for (int j = 0; j < loops; ++j) {
                 // Vector processs.
                 for (i = 0; i < cntBlock; ++i) {
+                    // Equivalent to scalar model: rt += src[i];
                     vrt += vsrc[i]; // Add.
                 }
                 // Remainder processs.
@@ -312,7 +313,7 @@ namespace BenchmarkVector {
                 }
             }
             // Reduce.
-            rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
+            rt += vrt.X + vrt.Y + vrt.Z + vrt.W;
             return rt;
         }
 
@@ -321,7 +322,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVector4U4(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -362,7 +363,7 @@ namespace BenchmarkVector {
             }
             // Reduce.
             vrt = vrt + vrt1 + vrt2 + vrt3;
-            rt = vrt.X + vrt.Y + vrt.Z + vrt.W;
+            rt += vrt.X + vrt.Y + vrt.Z + vrt.W;
             return rt;
         }
 
@@ -371,7 +372,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorT(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -413,7 +414,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorTU4(float[] src, int count, int loops) {
             float rt = 0; // Result.
@@ -465,7 +466,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvx(float[] src, int count, int loops) {
 #if Allow_Intrinsics
@@ -512,7 +513,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxU4(float[] src, int count, int loops) {
 #if Allow_Intrinsics
@@ -568,7 +569,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxSpan(float[] src, int count, int loops) {
 #if Allow_Intrinsics
@@ -609,7 +610,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxSpanU4(float[] src, int count, int loops) {
 #if Allow_Intrinsics
@@ -660,7 +661,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxPtr(float[] src, int count, int loops) {
 #if Allow_Intrinsics && UNSAFE
@@ -706,7 +707,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxPtrU4(float[] src, int count, int loops) {
 #if Allow_Intrinsics && UNSAFE
@@ -766,7 +767,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxPtrU16(float[] src, int count, int loops) {
 #if Allow_Intrinsics && UNSAFE
@@ -847,7 +848,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxPtrU16A(float[] src, int count, int loops) {
 #if Allow_Intrinsics && UNSAFE
@@ -915,7 +916,7 @@ namespace BenchmarkVector {
         /// </summary>
         /// <param name="src">Soure array.</param>
         /// <param name="count">Soure array count.</param>
-        /// <param name="count">Benchmark loops.</param>
+        /// <param name="loops">Benchmark loops.</param>
         /// <param name="LoopUnrolling">The loopUnrolling.</param>
         /// <returns>Return the sum value.</returns>
         private static float SumVectorAvxPtrUX(float[] src, int count, int loops, int LoopUnrolling) {
