@@ -142,7 +142,7 @@ namespace VectorClassDemo {
         }
 
         /// <summary>
-        /// WriteLine wuth format.
+        /// WriteLine with format.
         /// </summary>
         /// <typeparam name="T">Vector value type.</typeparam>
         /// <param name="tw">The TextWriter.</param>
@@ -158,7 +158,7 @@ namespace VectorClassDemo {
         }
 
         /// <summary>
-        /// WriteLine wuth format.
+        /// WriteLine with format.
         /// </summary>
         /// <param name="tw">The TextWriter.</param>
         /// <param name="indent">The indent.</param>
