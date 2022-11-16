@@ -1,6 +1,8 @@
 # BenchmarkVector
 Using SIMD vector types to speed up floating-point array summation (使用SIMD向量类型加速浮点数组求和运算).
 
+https://www.cnblogs.com/zyl910/p/dotnet_simd_BenchmarkVector3.html
+
 Project list: 
 - BenchmarkVector: Shared Project.
 - BenchmarkVectorCore20: .NETCoreApp 2.0 Console Application.
