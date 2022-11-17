@@ -266,6 +266,7 @@ namespace VectorClassDemo {
             Vector<T> src0 = Vector<T>.Zero;
             Vector<T> src1 = Vector<T>.One;
             Vector<T> srcAllOnes = ~Vector<T>.Zero;
+            int elementBitSize = (Vector<byte>.Count / Vector<T>.Count) * 8;
             tw.WriteLine(indent + string.Format("-- {0}, Vector<{0}>.Count={1} --", typeof(T).Name, Vector<T>.Count));
             WriteLineFormat(tw, indent, "srcT:\t{0}", srcT);
             //WriteLineFormat(tw, indent, "src2:\t{0}", src2);
@@ -493,11 +494,50 @@ namespace VectorClassDemo {
             //ShiftLeft(Vector<UInt32>, Int32) Shifts each element of a vector left by the specified amount.
             //ShiftLeft(Vector<UInt64>, Int32)    Shifts each element of a vector left by the specified amount.
             //ShiftLeft(Vector<UIntPtr>, Int32) Shifts each element of a vector left by the specified amount.
+            int[] shiftCounts = new int[] { 1, elementBitSize - 1, elementBitSize, elementBitSize + 1, -1 };
+            foreach (int shiftCount in shiftCounts) {
+                if (typeof(T) == typeof(Byte)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorByte(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int16)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorInt16(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int32)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorInt32(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int64)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorInt64(srcT), shiftCount));
+                } else if (typeof(T) == typeof(IntPtr)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorNInt(srcT), shiftCount));
+                } else if (typeof(T) == typeof(SByte)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorSByte(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt16)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorUInt16(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt32)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorUInt32(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt64)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorUInt64(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UIntPtr)) {
+                    WriteLineFormat(tw, indent, "ShiftLeft(srcT, " + shiftCount + "):\t{0}", Vector.ShiftLeft(Vector.AsVectorNUInt(srcT), shiftCount));
+                }
+            }
+
             //ShiftRightArithmetic(Vector<Int16>, Int32)  Shifts(signed) each element of a vector right by the specified amount.
             //ShiftRightArithmetic(Vector<Int32>, Int32)  Shifts(signed) each element of a vector right by the specified amount.
             //ShiftRightArithmetic(Vector<Int64>, Int32)  Shifts(signed) each element of a vector right by the specified amount.
             //ShiftRightArithmetic(Vector<IntPtr>, Int32) Shifts(signed) each element of a vector right by the specified amount.
             //ShiftRightArithmetic(Vector<SByte>, Int32)  Shifts(signed) each element of a vector right by the specified amount.
+            foreach (int shiftCount in shiftCounts) {
+                if (typeof(T) == typeof(Int16)) {
+                    WriteLineFormat(tw, indent, "ShiftRightArithmetic(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightArithmetic(Vector.AsVectorInt16(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int32)) {
+                    WriteLineFormat(tw, indent, "ShiftRightArithmetic(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightArithmetic(Vector.AsVectorInt32(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int64)) {
+                    WriteLineFormat(tw, indent, "ShiftRightArithmetic(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightArithmetic(Vector.AsVectorInt64(srcT), shiftCount));
+                } else if (typeof(T) == typeof(IntPtr)) {
+                    WriteLineFormat(tw, indent, "ShiftRightArithmetic(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightArithmetic(Vector.AsVectorNInt(srcT), shiftCount));
+                } else if (typeof(T) == typeof(SByte)) {
+                    WriteLineFormat(tw, indent, "ShiftRightArithmetic(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightArithmetic(Vector.AsVectorSByte(srcT), shiftCount));
+                }
+            }
+
             //ShiftRightLogical(Vector<Byte>, Int32)  Shifts(unsigned) each element of a vector right by the specified amount.
             //ShiftRightLogical(Vector<Int16>, Int32) Shifts(unsigned) each element of a vector right by the specified amount.
             //ShiftRightLogical(Vector<Int32>, Int32) Shifts(unsigned) each element of a vector right by the specified amount.
@@ -508,6 +548,29 @@ namespace VectorClassDemo {
             //ShiftRightLogical(Vector<UInt32>, Int32)    Shifts(unsigned) each element of a vector right by the specified amount.
             //ShiftRightLogical(Vector<UInt64>, Int32)    Shifts(unsigned) each element of a vector right by the specified amount.
             //ShiftRightLogical(Vector<UIntPtr>, Int32)   Shifts(unsigned) each element of a vector right by the specified amount.
+            foreach (int shiftCount in shiftCounts) {
+                if (typeof(T) == typeof(Byte)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorByte(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int16)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorInt16(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int32)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorInt32(srcT), shiftCount));
+                } else if (typeof(T) == typeof(Int64)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorInt64(srcT), shiftCount));
+                } else if (typeof(T) == typeof(IntPtr)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorNInt(srcT), shiftCount));
+                } else if (typeof(T) == typeof(SByte)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorSByte(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt16)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorUInt16(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt32)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorUInt32(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UInt64)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorUInt64(srcT), shiftCount));
+                } else if (typeof(T) == typeof(UIntPtr)) {
+                    WriteLineFormat(tw, indent, "ShiftRightLogical(srcT, " + shiftCount + "):\t{0}", Vector.ShiftRightLogical(Vector.AsVectorNUInt(srcT), shiftCount));
+                }
+            }
 #endif // NET7_0_OR_GREATER
 
             //SquareRoot<T>(Vector<T>)    Returns a new vector whose elements are the square roots of a specified vector's elements.
