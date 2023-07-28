@@ -159,6 +159,13 @@ namespace BenchmarkVector {
                     mFlops = countMFlops * 1000 / msUsed;
                     scale = mFlops / mFlopsBase;
                     tw.WriteLine(indent + string.Format("SumVectorAvxSpan:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    // SumVectorAvxRef.
+                    tickBegin = Environment.TickCount;
+                    rt = SumVectorAvxRef(src, count, loops);
+                    msUsed = Environment.TickCount - tickBegin;
+                    mFlops = countMFlops * 1000 / msUsed;
+                    scale = mFlops / mFlopsBase;
+                    tw.WriteLine(indent + string.Format("SumVectorAvxRef:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
                     // SumVectorAvxPtr.
                     tickBegin = Environment.TickCount;
                     rt = SumVectorAvxPtr(src, count, loops);
@@ -697,6 +704,46 @@ namespace BenchmarkVector {
                 }
                 return rt;
             }
+#else
+            throw new NotSupportedException();
+#endif
+        }
+
+        /// <summary>
+        /// Sum - Vector AVX - Ref.
+        /// </summary>
+        /// <param name="src">Soure array.</param>
+        /// <param name="count">Soure array count.</param>
+        /// <param name="loops">Benchmark loops.</param>
+        /// <returns>Return the sum value.</returns>
+        private static float SumVectorAvxRef(float[] src, int count, int loops) {
+#if Allow_Intrinsics
+            float rt = 0; // Result.
+            int VectorWidth = Vector256<float>.Count; // Block width.
+            int nBlockWidth = VectorWidth; // Block width.
+            int cntBlock = count / nBlockWidth; // Block count.
+            int cntRem = count % nBlockWidth; // Remainder count.
+            Vector256<float> vrt = Vector256<float>.Zero; // Vector result.
+            int i;
+            // Body.
+            for (int j = 0; j < loops; ++j) {
+                ref Vector256<float> p0 = ref Unsafe.As<float, Vector256<float>> (ref src[0]); // Pointer for src data.
+                // Vector processs.
+                for (i = 0; i < cntBlock; ++i) {
+                    vrt = Avx.Add(vrt, p0);    // Add. vrt += vsrc[i];
+                    p0 = ref Unsafe.Add(ref p0, 1);
+                }
+                // Remainder processs.
+                ref float p = ref Unsafe.As<Vector256<float>, float>(ref p0);
+                for (i = 0; i < cntRem; ++i) {
+                    rt += Unsafe.Add(ref p, i);
+                }
+            }
+            // Reduce.
+            for (i = 0; i < VectorWidth; ++i) {
+                rt += vrt.GetElement(i);
+            }
+            return rt;
 #else
             throw new NotSupportedException();
 #endif
