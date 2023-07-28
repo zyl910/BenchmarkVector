@@ -4,16 +4,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 #if Allow_Intrinsics
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 #endif
-using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace BenchmarkVector {
     /// <summary>
@@ -81,6 +82,7 @@ namespace BenchmarkVector {
             if (null == indent) indent = "";
             //string indentNext = indent + "\t";
             // init.
+            bool useBreakPoint = false;
             int tickBegin, msUsed;
             double mFlops; // MFLOPS/s .
             double scale;
@@ -166,6 +168,10 @@ namespace BenchmarkVector {
                     mFlops = countMFlops * 1000 / msUsed;
                     scale = mFlops / mFlopsBase;
                     tw.WriteLine(indent + string.Format("SumVectorAvxRef:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    if (useBreakPoint) {
+                        Debugger.Break();
+                        rt = SumVectorAvxRef(src, count, 1);
+                    }
                     // SumVectorAvxPtr.
                     tickBegin = Environment.TickCount;
                     rt = SumVectorAvxPtr(src, count, loops);
@@ -173,6 +179,10 @@ namespace BenchmarkVector {
                     mFlops = countMFlops * 1000 / msUsed;
                     scale = mFlops / mFlopsBase;
                     tw.WriteLine(indent + string.Format("SumVectorAvxPtr:\t{0}\t# msUsed={1}, MFLOPS/s={2}, scale={3}", rt, msUsed, mFlops, scale));
+                    if (useBreakPoint) {
+                        Debugger.Break();
+                        rt = SumVectorAvxPtr(src, count, 1);
+                    }
                     // SumVectorAvxU4.
                     if (EnabledLoopUnrolling) {
                         tickBegin = Environment.TickCount;
