@@ -443,8 +443,8 @@ namespace BenchmarkVector {
                 for (i = 0; i < cntBlock; ++i) {
                     vrt += vsrc[p]; // Add.
                     vrt1 += vsrc[p + 1];
-                    vrt2 += vsrc[p + 1];
-                    vrt3 += vsrc[p + 1];
+                    vrt2 += vsrc[p + 2];
+                    vrt3 += vsrc[p + 3];
                     p += LoopUnrolling;
                 }
                 // Remainder processs.
